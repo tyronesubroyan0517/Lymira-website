@@ -1,6 +1,7 @@
 # Artwork file names
 
 Use webp, jpg, png or svg. Rebuild after adding files.
+The hero can also be a video: `brand/hero-banner.mp4`.
 
 ## brand/
 - `monogram` : circular gold monogram, transparent background

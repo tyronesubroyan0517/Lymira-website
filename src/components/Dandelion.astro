@@ -1,0 +1,22 @@
+---
+// Site ornament: a dandelion drawn in gold line. Each seed is its own group so the
+// motion layer can blow them away on scroll. Decoration only, never product art.
+const { class: cls = '', seeds = 26 } = Astro.props
+const cx = 100, cy = 78
+const items = []
+for (let i = 0; i < seeds; i++) {
+  const a = (i * (360 / seeds) * Math.PI) / 180
+  const r = 38 + (i % 3) * 7
+  const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r
+  const x0 = cx + Math.cos(a) * 6, y0 = cy + Math.sin(a) * 6
+  const tip = (d) => `${(x + Math.cos(a + d) * 8).toFixed(1)} ${(y + Math.sin(a + d) * 8).toFixed(1)}`
+  const xy = `${x.toFixed(1)} ${y.toFixed(1)}`
+  items.push(`M${x0.toFixed(1)} ${y0.toFixed(1)}L${xy}M${xy}L${tip(0.75)}M${xy}L${tip(-0.75)}M${xy}L${tip(0)}`)
+}
+---
+<svg class={`dandelion ${cls}`} viewBox="0 0 200 240" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+  <path class="stem" d="M100 84C97 132 92 182 86 238" />
+  <path class="leaf" d="M91 178C78 171 67 174 60 184C70 189 82 187 91 178Z" />
+  <circle cx={cx} cy={cy} r="4.5" />
+  {items.map((d) => <g class="seed"><path d={d} /></g>)}
+</svg>

@@ -1,0 +1,101 @@
+---
+import { ClientRouter } from 'astro:transitions'
+import '../styles/global.css'
+import Monogram from '../components/Monogram.astro'
+import Sprig from '../components/Sprig.astro'
+import { site, categories } from '../data/content.js'
+
+const { title, description, bodyClass = "" } = Astro.props
+const canonical = new URL(Astro.url.pathname.replace(/\/index$/, '/'), site.domain).href
+const NAV = [
+  ['/', 'Home'],
+  ['/shop', 'Shop'],
+  ['/tailor-made', 'Tailor-Made'],
+  ['/about', 'About'],
+  ['/journal', 'Journal'],
+  ['/contact', 'Contact'],
+]
+const ext = { target: '_blank', rel: 'noopener' }
+const pageTransition = {
+  forwards: {
+    old: { name: 'page-out', duration: '0.45s', easing: 'cubic-bezier(0.7, 0, 0.84, 0)', fillMode: 'both' },
+    new: { name: 'page-in', duration: '0.7s', easing: 'cubic-bezier(0.16, 1, 0.3, 1)', delay: '0.05s', fillMode: 'both' },
+  },
+  backwards: {
+    old: { name: 'page-out', duration: '0.45s', easing: 'cubic-bezier(0.7, 0, 0.84, 0)', fillMode: 'both' },
+    new: { name: 'page-in', duration: '0.7s', easing: 'cubic-bezier(0.16, 1, 0.3, 1)', delay: '0.05s', fillMode: 'both' },
+  },
+}
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Lymira Creations" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta name="theme-color" content="#FCF5EB" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=EB+Garamond:wght@500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" />
+  <ClientRouter fallback="swap" />
+</head>
+<body class={bodyClass}>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header" transition:persist="site-header" transition:animate="none">
+    <div class="announce">Instant digital downloads · Available worldwide</div>
+    <div class="wrap header-bar">
+      <a class="brand" href="/" aria-label="Lymira Creations home">
+        <Monogram />
+        <span class="wordmark">Lymira Creations</span>
+      </a>
+      <nav class="nav-desktop" aria-label="Main">
+        <ul>{NAV.map(([href, label]) => <li><a href={href} data-nav>{label}</a></li>)}</ul>
+      </nav>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-panel">
+        <span class="menu-lines" aria-hidden="true"><span></span><span></span></span>
+        <span class="menu-label">Menu</span>
+      </button>
+    </div>
+    <div class="menu-panel" id="menu-panel" hidden>
+      <nav class="wrap" aria-label="Main">
+        <ul>{NAV.map(([href, label]) => <li><a href={href} data-nav>{label}</a></li>)}</ul>
+        <p class="menu-foot"><a href={site.whatsapp} {...ext}>WhatsApp</a><a href={`mailto:${site.email}`}>Email</a><a href={site.store} {...ext}>Payhip store</a></p>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" transition:animate={pageTransition}>
+    <slot />
+  </main>
+
+  <footer class="site-footer" transition:animate={pageTransition}>
+    <div class="wrap">
+      <div class="footer-top" data-reveal>
+        <Monogram class="monogram-lg" />
+        <p class="footer-tagline">Made to Reconnect</p>
+        <Sprig />
+      </div>
+      <div class="footer-cols">
+        <div><h2>Shop</h2><ul>{categories.map((c) => <li><a href={`/shop#${c.id}`}>{c.name}</a></li>)}</ul></div>
+        <div><h2>Studio</h2><ul><li><a href="/about">About</a></li><li><a href="/tailor-made">Tailor-made designs</a></li><li><a href="/journal">Journal</a></li><li><a href={site.store} {...ext}>Payhip store</a></li></ul></div>
+        <div><h2>Follow</h2><ul>{site.social.map((s) => <li><a href={s.url} {...ext}>{s.label}</a></li>)}</ul></div>
+        <div><h2>Contact</h2><ul><li><a href={site.whatsapp} {...ext}>WhatsApp</a></li><li><a href={`mailto:${site.email}`}>hello<wbr />@lymiracollective.com</a></li></ul></div>
+      </div>
+      <div class="footer-legal"><p>{site.legal}</p><p>© {new Date().getFullYear()} Lymira Creations. All creations are digital. Nothing is shipped.</p></div>
+    </div>
+  </footer>
+
+  <script>
+    import { boot } from '../scripts/motion.js'
+    boot()
+  </script>
+</body>
+</html>

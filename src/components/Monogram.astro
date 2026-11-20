@@ -1,0 +1,14 @@
+---
+import { asset } from '../lib/assets.js'
+const { class: cls = '' } = Astro.props
+const src = asset('brand/monogram')
+---
+{src ? (
+  <img class={`monogram ${cls}`} src={src} alt="" width="68" height="68" />
+) : (
+  <svg class={`monogram ${cls}`} viewBox="0 0 68 68" aria-hidden="true" data-draw>
+    <circle cx="34" cy="34" r="32.5" fill="var(--paper)" stroke="var(--gold)" stroke-width="1.5" />
+    <circle cx="34" cy="34" r="28.5" fill="none" stroke="var(--gold)" stroke-width="0.6" />
+    <text x="34" y="46" text-anchor="middle" font-family="'Alex Brush', cursive" font-size="38" fill="var(--rose)">L</text>
+  </svg>
+)}

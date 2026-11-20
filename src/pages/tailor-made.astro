@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro'
+import { site, reviews } from '../data/content.js'
+import { wa } from '../lib/assets.js'
+const ext = { target: '_blank', rel: 'noopener' }
+const order = wa(site.whatsapp, 'Hello Lymira Creations, I would like to order a tailor-made design.')
+const steps = [
+  ['Tell us about the occasion', 'Message us on WhatsApp and we will send a short order form for your details, wording and style.'],
+  ['Receive your first draft', 'Invitations and cards arrive within 3 working days. Invitation websites take about 5 working days.'],
+  ['Refine it together', 'Two rounds of revisions are included, so the final design reads exactly as you want it.'],
+]
+const rates = [
+  ['Extra page', '+$5'],
+  ['Extra photo, QR code, map or size, each', '+$2'],
+  ['Extra revision round', '+$2'],
+]
+const nutan = reviews[0]
+---
+<Layout
+  title="Tailor-Made Invitations & Wedding Websites | Lymira Creations"
+  description="Custom invitations, cards and wedding invitation websites designed to order by Lymira Creations. From $10, first draft within 3 working days. Order on WhatsApp."
+>
+  <section class="page-head">
+    <div class="wrap section-head">
+      <p class="eyebrow">Tailor-made designs</p>
+      <h1 data-split>Designed to order, in any style you like</h1>
+      <p class="lede" data-reveal>Invitations, cards and invitation websites made for one occasion: yours. You are not limited to the Lymira styles.</p>
+      <div class="btn-row" data-reveal><a class="btn" href={order} {...ext}>Start on WhatsApp <span class="arrow" aria-hidden="true">→</span></a></div>
+    </div>
+  </section>
+
+  <section class="section band-paper">
+    <div class="wrap stack-lg">
+      <h2 data-split>Three steps to your design</h2>
+      <div class="steps">
+        {steps.map(([t, d], i) => (
+          <div class="step" data-reveal><span class="step-n">{i + 1}</span><h3>{t}</h3><p>{d}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap two-col">
+      <div class="stack">
+        <h2 data-split>Invitations and cards</h2>
+        <div class="rates">
+          <div class="rate rate-lead" data-reveal><span>Tailor-made invitation or card</span><strong>from $10</strong></div>
+          {rates.map(([k, v]) => <div class="rate" data-reveal><span>{k}</span><strong>{v}</strong></div>)}
+        </div>
+        <p class="muted" data-reveal>Tailor-made storybooks for schools are priced on request.</p>
+      </div>
+      <div class="stack">
+        <h2 data-split>Invitation websites</h2>
+        <p data-reveal>The wedding range covers engagements, save the dates and weddings. The bridal party range covers bachelorettes and similar gatherings. Multi-event weddings are quoted per event.</p>
+        <ul class="ticks" data-reveal><li>Your site stays live until the day of the event</li><li>Custom domains are not provided</li><li>RSVP forms and gift details stay in your own accounts</li></ul>
+        <a class="text-link" href={wa(site.whatsapp, 'Hello Lymira Creations, I would like price details for a tailor-made invitation website.')} {...ext}>WhatsApp us for price details</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-blue">
+    <div class="wrap narrow stack center">
+      <span class="review-mark" aria-hidden="true">“</span>
+      <p class="statement" style="font-size:clamp(1.6rem,3.6vw,2.6rem)" data-fill>{nutan.quote}</p>
+      <p class="eyebrow">{nutan.name} · {nutan.about}</p>
+      <p class="muted" style="margin-top:1.5rem">Prefer Fiverr? Find <a href={site.fiverr.invitations} {...ext}>custom invitations and invitation websites</a> and <a href={site.fiverr.storybooks} {...ext}>storybooks and activity books for kids</a> there.</p>
+    </div>
+  </section>
+</Layout>

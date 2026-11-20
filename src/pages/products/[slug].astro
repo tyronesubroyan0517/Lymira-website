@@ -1,0 +1,98 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import Slot from '../../components/Slot.astro'
+import ProductCard from '../../components/ProductCard.astro'
+import { site, categories, products } from '../../data/content.js'
+import { wa } from '../../lib/assets.js'
+
+export function getStaticPaths() {
+  return products.map((p) => ({ params: { slug: p.slug }, props: { p } }))
+}
+
+const { p } = Astro.props
+const c = categories.find((x) => x.id === p.category)
+const ext = { target: '_blank', rel: 'noopener' }
+const related = products.filter((x) => x.category === p.category && x.slug !== p.slug && (!p.group || x.group === p.group)).slice(0, 3)
+
+let buy
+if (p.comingSoon) buy = { href: wa(site.whatsapp, `Hello Lymira Creations, please let me know when ${p.title} is available.`), label: 'Tell me when it is ready', ghost: true }
+else if (p.whatsapp) buy = { href: wa(site.whatsapp, `Hello Lymira Creations, I would like price details for the ${p.title}.`), label: 'WhatsApp us for price details' }
+else buy = { href: p.url || site.store, label: p.price ? 'Buy now' : 'See price and buy' }
+
+const sections = [{ title: 'What you will receive', items: p.receive, open: true }]
+if (p.canva)
+  sections.push({
+    title: 'What you can edit',
+    items: [
+      'Fully editable in Canva: change the wording and details to make it yours',
+      'A free Canva account is all you need. Every element is free, so Canva Pro is not required',
+      'After checkout, open your thank-you PDF and click the template link. Your own copy opens in Canva',
+      ...(p.size ? [`Sized ${p.size}, made to send on WhatsApp or by text`] : []),
+    ],
+  })
+if (p.website)
+  sections.push({
+    title: 'Good to know',
+    items: p.whatsapp
+      ? ['Built in Canva and designed for phones first', 'Your site stays live until the day of the event', 'Custom domains are not provided', 'RSVP forms and gift details stay in your own accounts']
+      : ['Built in Canva and designed for phones first', 'You publish the site from your own Canva account and share the link'],
+  })
+if (p.poppy)
+  sections.push({
+    title: 'For parents and teachers',
+    items: ['Ages 3 to 5: read aloud together', 'Ages 6 to 8: early readers can read it themselves', 'Suited to Pre-K to Grade 2 classrooms', 'Schools: one purchase per teacher, who may print copies for their own class. Not for resale'],
+  })
+---
+<Layout title={`${p.title} | Lymira Creations`} description={`${p.problem} ${p.line} Instant digital download from Lymira Creations.`}>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/shop">Shop</a> / <a href={`/shop#${c.id}`}>{c.name}</a></nav>
+    <article class="product">
+      <div class="product-media">
+        <div class="main-shot">
+          {p.comingSoon && <span class="badge">Coming soon</span>}
+          <Slot file={`products/${p.slug}`} alt={p.alt} wash={c.wash} eager />
+        </div>
+        {p.website && (
+          <div class="media-extra">
+            <Slot file={`products/${p.slug}-receive`} alt={`What you will receive with ${p.title}`} wash={c.wash} ratio="r-11" note="What you will receive" />
+            <Slot file={`products/${p.slug}-video`} alt={`Preview of ${p.title}`} wash={c.wash} ratio="r-11" note="Preview video" />
+          </div>
+        )}
+        {p.poppy && (
+          <div class="media-extra">
+            <Slot file={`products/${p.slug}-sample-1`} alt={`Sample page from ${p.title}`} wash={c.wash} ratio="r-11" note="Sample page" />
+            <Slot file={`products/${p.slug}-sample-2`} alt={`Second sample page from ${p.title}`} wash={c.wash} ratio="r-11" note="Sample page" />
+          </div>
+        )}
+      </div>
+      <div class="product-info">
+        <p class="eyebrow">{p.type}</p>
+        <h1 data-split>{p.title}</h1>
+        {p.subtitle && <p class="product-sub">{p.subtitle}</p>}
+        {p.price ? <p class="product-price">{p.price}</p> : p.priceNote ? <p class="price small">{p.priceNote}</p> : p.comingSoon ? <p class="price small">Coming soon</p> : null}
+        <p class="problem">{p.problem}</p>
+        {p.body.map((b) => <p>{b}</p>)}
+        <div class="btn-row">
+          <a class={buy.ghost ? 'btn btn-ghost' : 'btn'} href={buy.href} {...ext}>{buy.label} <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+        <p class="assure">{p.whatsapp ? <><span>Tailor-made</span><span>Available worldwide</span></> : <><span>Instant digital download</span><span>Available worldwide</span><span>Secure checkout on Payhip</span></>}</p>
+        <div class="details">
+          {sections.map((s) => (
+            <details open={s.open}>
+              <summary>{s.title}</summary>
+              <ul class="ticks">{s.items.map((i) => <li>{i}</li>)}</ul>
+            </details>
+          ))}
+        </div>
+      </div>
+    </article>
+  </div>
+  {related.length > 0 && (
+    <section class="section band-paper">
+      <div class="wrap stack-lg">
+        <h2 data-split>You may also like</h2>
+        <div class="grid">{related.map((x) => <ProductCard p={x} />)}</div>
+      </div>
+    </section>
+  )}
+</Layout>

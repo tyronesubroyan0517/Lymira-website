@@ -1,0 +1,157 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Dandelion from '../components/Dandelion.astro'
+import Slot from '../components/Slot.astro'
+import Sprig from '../components/Sprig.astro'
+import ProductCard from '../components/ProductCard.astro'
+import { site, categories, products, reviews } from '../data/content.js'
+import { asset, video, wa } from '../lib/assets.js'
+
+const heroImg = asset('brand/hero-banner')
+const heroVid = video('brand/hero-banner')
+const featuredOrder = ['bloom-where-you-are', 'poppys-feelings-bundle', 'hugos-kindness-bundle', 'christmas-as-we-lived-it']
+const featured = featuredOrder.map((s) => products.find((p) => p.slug === s))
+const showcase = products.filter((p) => p.showcase)
+const kickers = {
+  journals: 'Reflect',
+  'little-hearts': 'Discover',
+  becoming: 'Grow',
+  celebrations: 'Celebrate',
+}
+const ext = { target: '_blank', rel: 'noopener' }
+---
+<Layout
+  bodyClass="page-home"
+  title="Lymira Creations | SEL Storybooks & Canva Invitations"
+  description="Lymira Creations is a digital products studio: self-care journals, feelings storybooks for kids, editable Canva invitations and cards, and wedding invitation websites. Instant digital download, available worldwide."
+>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-frame">
+        {heroVid ? (
+          <video src={heroVid} poster={heroImg} autoplay muted loop playsinline aria-label="Watercolour scene of a girl walking a path with a dandelion and a bluebird, with the Lymira Creations wordmark"></video>
+        ) : heroImg ? (
+          <img src={heroImg} alt="Watercolour scene of a girl walking a path with a dandelion and a bluebird, with the Lymira Creations wordmark" fetchpriority="high" />
+        ) : (
+          <>
+            <div class="hero-wash"></div>
+            <div class="hero-placeholder">
+              <Dandelion class="hero-art" seeds={30} />
+              <p class="hero-wordmark" aria-hidden="true">Lymira Creations</p>
+            </div>
+            <p class="hero-note">Hero banner artwork to be placed</p>
+          </>
+        )}
+      </div>
+      <div class="hero-copy">
+        <h1 class="sr-only">Lymira Creations</h1>
+        <p class="hero-tagline" data-split>Made to Reconnect</p>
+        <div class="hero-side">
+          <p class="lede" data-intro>{site.subtagline}</p>
+          <a class="btn" href="/shop" data-intro>Shop the Collection <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-paper">
+    <div class="wrap">
+      <p class="statement" data-fill>Journals, storybooks and invitations, crafted by a former teacher with 18 years in classrooms across three continents.</p>
+      <div class="statement-foot" data-reveal>
+        <p class="muted">Lymira began with one self-care journal, Bloom Where You Are. Every creation since is an instant digital download, available worldwide.</p>
+        <a class="text-link" href="/about">Read our story</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="worlds" aria-labelledby="worlds-title">
+    <div class="wrap worlds-head">
+      <h2 id="worlds-title" data-split>Four ways to reconnect</h2>
+    </div>
+    <div class="worlds-track">
+      {categories.map((c) => (
+        <a class={`world wash-${c.wash}`} href={`/shop#${c.id}`}>
+          <div class="world-art"><Slot file={`brand/category-${c.id}`} alt={`${c.name} artwork`} wash={c.wash} arch note="Artwork to be placed" /></div>
+          <div class="world-copy">
+            <p class="world-kicker">{kickers[c.id]}</p>
+            <h3>{c.name}</h3>
+            <p>{c.blurb}</p>
+            <p class="muted">{c.world}.</p>
+            <span class="text-link">Explore</span>
+          </div>
+        </a>
+      ))}
+    </div>
+    <div class="worlds-progress" aria-hidden="true"><span></span></div>
+  </section>
+
+  <section class="section band-sage">
+    <div class="wrap stack-lg">
+      <div class="section-head">
+        <h2 data-split>Featured creations</h2>
+      </div>
+      <div class="bento">
+        {featured.map((p, i) => <ProductCard p={p} size={i === 0 ? 'card-hero' : ''} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap stack-lg">
+      <div class="section-head center" style="text-align:center">
+        <p class="eyebrow">Invitation websites</p>
+        <h2 data-split>An invitation your guests open like a story</h2>
+        <p class="lede" data-reveal>Details, countdown and RSVP in one link. Edit a Canva template yourself, or have yours tailor-made.</p>
+      </div>
+      <div class="phones">
+        {showcase.map((p) => (
+          <a class="phone-item" href={`/products/${p.slug}`}>
+            <div class="phone">
+              <Slot file={`websites/${p.slug}`} alt={p.alt} wash={p.showcase === 'Wedding' ? 'blue' : p.showcase === 'Christmas' ? 'sage' : 'rose'} ratio="" note="Screen to be placed" />
+            </div>
+            <p class="card-meta">{p.showcase}{p.comingSoon ? ' · Coming soon' : ''}</p>
+            <h3>{p.title}</h3>
+          </a>
+        ))}
+      </div>
+      <div class="btn-row" style="justify-content:center" data-reveal>
+        <a class="btn" href="/shop#invitation-websites">Browse templates <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href={wa(site.whatsapp, 'Hello Lymira Creations, I would like price details for a tailor-made invitation website.')} {...ext}>Ask about tailor-made</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-blue">
+    <div class="stack-lg">
+      <div class="wrap section-head">
+        <h2 data-split>Kind words</h2>
+      </div>
+      <div class="marquee">
+        <div class="marquee-track">
+          {[0, 1].map((copy) =>
+            reviews.map((r) => (
+              <figure class="review" aria-hidden={copy === 1 ? 'true' : undefined}>
+                <span class="review-mark" aria-hidden="true">“</span>
+                <blockquote>{r.quote}</blockquote>
+                <figcaption><strong>{r.name}</strong> · {r.about}</figcaption>
+              </figure>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split" id="ebook">
+      <div class="split-media"><div data-parallax><Slot file="products/the-last-time-i-came-last" alt="The Last Time I Came Last ebook cover shown on a tablet" wash="lavender" arch note="Ebook cover to be placed" /></div></div>
+      <div class="stack">
+        <p class="eyebrow">Free with every store purchase</p>
+        <h2 data-split>The Last Time I Came Last</h2>
+        <p data-reveal>A short ebook with a 0 to 10 quiz, for anyone who has been last on their own list for too long.</p>
+        <p class="muted" data-reveal>It ends with an invitation to a free 15-minute Reconnect Call on WhatsApp. Tailor-made orders do not include the ebook.</p>
+        <Sprig />
+      </div>
+    </div>
+  </section>
+</Layout>

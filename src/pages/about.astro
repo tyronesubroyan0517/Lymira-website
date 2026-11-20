@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Slot from '../components/Slot.astro'
+const worlds = [
+  ['With yourself', 'Self-care journals and a free ebook for the quiet minutes you keep for you.', '/shop#journals', 'lavender'],
+  ['With your child', 'The Poppy series: stories and activities that help children name big feelings.', '/shop#little-hearts', 'sage'],
+  ['With loved ones', 'Invitations, cards and invitation websites for the days worth gathering for.', '/shop#celebrations', 'blue'],
+]
+---
+<Layout
+  title="About | Lymira Creations"
+  description="The story behind Lymira Creations: a digital products studio founded by a former teacher with 18 years in classrooms across three continents."
+>
+  <section class="page-head">
+    <div class="wrap section-head">
+      <p class="eyebrow">Our story</p>
+      <h1 data-split>“For years I said ‘I’m done.’ Then life finally listened.”</h1>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="wrap split">
+      <div class="split-media"><div data-parallax><Slot file="brand/about-artwork" alt="Made to Reconnect watercolour brand artwork" wash="sage" arch note="Made to Reconnect artwork" /></div></div>
+      <div class="stack">
+        <p class="lede" data-reveal>I spent 18 years in classrooms across three continents, including work with children with special educational needs. That experience sits behind every Poppy story.</p>
+        <p data-reveal>Lymira began with a single creation: Bloom Where You Are, a 30-day self-care journal. The storybooks, cards, invitations and invitation websites grew from there.</p>
+        <p data-reveal>I art-direct every illustration using AI image tools, then design and assemble each product myself in Canva. Nothing leaves the studio until it looks and reads the way it should.</p>
+        <p class="script" style="font-size:2.8rem;color:var(--rose-deep)" data-reveal>Yurika</p>
+        <p class="muted" data-reveal>Founder, Lymira Creations</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-paper">
+    <div class="wrap stack-lg">
+      <h2 data-split>Made to Reconnect</h2>
+      <div class="steps">
+        {worlds.map(([t, d, href]) => (
+          <a class="step" href={href} style="text-decoration:none;color:var(--ink)" data-reveal>
+            <h3 style="font-size:1.7rem;color:var(--sage-deep)">{t}</h3><p>{d}</p><span class="text-link">Explore</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

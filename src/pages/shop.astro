@@ -1,0 +1,96 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Slot from '../components/Slot.astro'
+import ProductCard from '../components/ProductCard.astro'
+import { site, categories, products } from '../data/content.js'
+import { wa } from '../lib/assets.js'
+
+const cat = (id) => categories.find((c) => c.id === id)
+const inCat = (id, group) => products.filter((p) => p.category === id && (!group || p.group === group))
+const ext = { target: '_blank', rel: 'noopener' }
+---
+<Layout
+  title="Shop the Collection | Lymira Creations"
+  description="Printable feelings books for kids, a 30 day self-care journal, editable Canva invitations and cards, and wedding website templates. Instant digital download from Lymira Creations."
+>
+  <section class="page-head">
+    <div class="wrap section-head">
+      <h1 data-split>Shop the Collection</h1>
+      <p class="lede" data-reveal>Journals, storybooks, cards and invitation websites. Every creation is an instant digital download, available worldwide.</p>
+    </div>
+  </section>
+
+  <div class="chips-bar">
+    <div class="wrap">
+      <nav class="chips" aria-label="Shop categories">
+        {categories.map((c) => <a class="chip" href={`#${c.id}`}>{c.name}</a>)}
+      </nav>
+    </div>
+  </div>
+
+  <section class="section-tight cat" id="journals">
+    <div class="wrap stack-lg">
+      <div class="cat-head">
+        <p class="cat-world">{cat('journals').world}</p>
+        <h2 data-split>{cat('journals').name}</h2>
+        <p data-reveal>Guided pages for the quiet minutes you keep for yourself. Coming next: an anxiety journal.</p>
+      </div>
+      <div class="grid">
+        {inCat('journals').map((p) => <ProductCard p={p} />)}
+        <a class="card" href="/journal#ebook" data-reveal>
+          <div class="card-media"><Slot file="products/the-last-time-i-came-last" alt="The Last Time I Came Last ebook cover shown on a tablet" wash="lavender" note="Ebook cover to be placed" /></div>
+          <div class="card-body">
+            <p class="card-meta">Ebook · Gift with purchase</p>
+            <h3>The Last Time I Came Last</h3>
+            <p class="card-line">A short read with a 0 to 10 quiz.</p>
+            <p class="price small">Free with any store purchase</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight band-sage cat" id="little-hearts">
+    <div class="wrap stack-lg">
+      <div class="cat-head">
+        <p class="cat-world">{cat('little-hearts').world}</p>
+        <h2 data-split>{cat('little-hearts').name}</h2>
+        <p data-reveal>Poppy the fox and Lumi the butterfly star in social-emotional learning stories for ages 3 to 8. Each story has its own activity book.</p>
+      </div>
+      <div class="grid">{inCat('little-hearts').map((p) => <ProductCard p={p} />)}</div>
+    </div>
+  </section>
+
+  <section class="section-tight cat" id="becoming">
+    <div class="wrap split">
+      <div class="split-media"><div data-parallax><Slot file="brand/category-becoming" alt="Becoming invitation bundle artwork" wash="rose" arch note="Artwork to be placed" /></div></div>
+      <div class="stack">
+        <p class="cat-world">{cat('becoming').world}</p>
+        <h2 data-split>Becoming</h2>
+        <p data-reveal>An invitation bundle for healing, growth and new beginnings. Becoming is not sold in the store. It is our thank-you gift after a Reconnect Call, a free 15-minute conversation on WhatsApp.</p>
+        <div class="btn-row" data-reveal>
+          <a class="btn" href={wa(site.whatsapp, 'Hello Lymira Creations, I would like to book a free 15-minute Reconnect Call.')} {...ext}>Book a Reconnect Call</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight band-blue cat" id="celebrations">
+    <div class="wrap stack-lg">
+      <div class="cat-head">
+        <p class="cat-world">{cat('celebrations').world}</p>
+        <h2 data-split>{cat('celebrations').name}</h2>
+        <p data-reveal>Every template is fully editable with a free Canva account. Birthday invitations are coming soon.</p>
+      </div>
+      <h3 class="sub-head" id="invitations-and-cards" data-reveal>Invitations and cards</h3>
+      <div class="grid">{inCat('celebrations', 'cards').map((p) => <ProductCard p={p} />)}</div>
+      <h3 class="sub-head cat" id="invitation-websites" data-reveal>Invitation websites</h3>
+      <div class="grid">{inCat('celebrations', 'websites').map((p) => <ProductCard p={p} />)}</div>
+      <div class="note-card" data-reveal>
+        <h3>Want something made only for you?</h3>
+        <p>Invitations, cards and invitation websites designed to order, in any style you like. From $10, with a first draft within 3 working days.</p>
+        <a class="text-link" href="/tailor-made">How tailor-made works</a>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,19 @@
+---
+import Slot from './Slot.astro'
+import { categories } from '../data/content.js'
+const { p, size = '' } = Astro.props
+const c = categories.find((x) => x.id === p.category)
+const price = p.price ?? (p.comingSoon ? 'Coming soon' : p.whatsapp ? 'Price on request' : 'See price in store')
+---
+<a class={`card ${size}`} href={`/products/${p.slug}`} data-reveal>
+  <div class="card-media">
+    {p.comingSoon && <span class="badge">Coming soon</span>}
+    <Slot file={`products/${p.slug}`} alt={p.alt} wash={c.wash} ratio={size === 'card-hero' ? 'r-fill' : 'r-45'} />
+  </div>
+  <div class="card-body">
+    <p class="card-meta">{p.type}</p>
+    <h3>{p.title}</h3>
+    <p class="card-line">{p.line}</p>
+    <p class={p.price ? 'price' : 'price small'}>{price}</p>
+  </div>
+</a>

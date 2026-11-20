@@ -1,35 +1,46 @@
 # Lymira Creations website
 
-Mobile-first static site for lymiracollective.com.
+Mobile-first site for lymiracollective.com, built with Astro, GSAP and Lenis.
 
-## Build
+## Run it
 
 ```bash
+npm install
+npm run dev        # local preview at http://localhost:4321
 npm run build      # writes dist/
 ```
-
-No dependencies. `build.mjs` turns the content in `src/content.mjs` into plain HTML pages.
 
 ## Editing
 
 | To change | Edit |
 |---|---|
-| Products, prices, Payhip links, reviews, contact links | `src/content.mjs` |
-| Page copy and layout | `build.mjs` |
-| Colours, fonts, spacing | `src/styles.css` |
+| Products, prices, Payhip links, reviews, contact links | `src/data/content.js` |
+| Pages | `src/pages/` (one file per page; product pages come from `products/[slug].astro`) |
+| Header, footer, page transitions | `src/layouts/Layout.astro` |
+| Colours, fonts, spacing | `src/styles/global.css` |
+| Animation | `src/scripts/motion.js` |
 
 A product with `price: null` shows "See price in store". A product with `url: null`
 sends the buy button to the main Payhip store page.
 
+## Motion
+
+- Page transitions between every page (Astro view transitions)
+- Smooth scrolling (Lenis)
+- Hero reveal, with the dandelion seeds blowing away as you scroll
+- Headings that rise into place, and a statement that fills in word by word
+- The four shop categories scroll sideways in a pinned section on desktop
+- Invitation-website phones fan out from a stack
+- Reviews drift past in a slow marquee that pauses on hover
+- Everything switches off when a visitor's device is set to reduce motion
+
 ## Adding artwork
 
-Every image area is a labelled placeholder until its file exists. Drop a file with the
-right name into `assets/` (webp, jpg, png or svg) and rebuild. See `assets/README.md`
-for the file names.
+Every image area is a labelled placeholder until its file exists. Put a file with the
+right name in `public/assets/` (webp, jpg, png or svg) and rebuild. The names are listed
+in `public/assets/README.md`. A hero video can go in as `public/assets/brand/hero-banner.mp4`.
 
-## Deploying to lymiracollective.com
+## Deploying
 
-1. In Vercel, create a new project from this repository. `vercel.json` already sets the
-   build command and output folder.
-2. In the project's Domains settings, add `lymiracollective.com` and `www.lymiracollective.com`.
-3. At the domain registrar, set the DNS records Vercel shows.
+In Vercel, create a new project from this repository. `vercel.json` sets everything else.
+The domain is added later, once the site is finished.

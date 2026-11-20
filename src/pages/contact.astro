@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Sprig from '../components/Sprig.astro'
+import { site } from '../data/content.js'
+const ext = { target: '_blank', rel: 'noopener' }
+---
+<Layout title="Contact | Lymira Creations" description="Contact Lymira Creations on WhatsApp or by email for orders, tailor-made designs and enquiries.">
+  <section class="page-head">
+    <div class="wrap section-head">
+      <h1 data-split>We would love to hear from you</h1>
+      <p class="lede" data-reveal>For orders, tailor-made designs, a Reconnect Call or a question about any creation.</p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="wrap">
+      <div class="contact-cards">
+        <div class="contact-card" data-reveal>
+          <p class="eyebrow">WhatsApp</p>
+          <p class="value">+971 50 179 9508</p>
+          <p class="muted">The quickest way to reach us, and where tailor-made orders begin.</p>
+          <a class="btn" href={site.whatsapp} {...ext}>Message us <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+        <div class="contact-card" data-reveal>
+          <p class="eyebrow">Email</p>
+          <p class="value">{site.email}</p>
+          <p class="muted">For anything that needs a longer note.</p>
+          <a class="btn btn-ghost" href={`mailto:${site.email}`}>Write an email</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap narrow stack center">
+      <Sprig />
+      <h2 data-split>Follow the studio</h2>
+      <div class="chips" style="flex-wrap:wrap;justify-content:center" data-reveal>
+        {site.social.map((s) => <a class="chip" href={s.url} {...ext}>{s.label}</a>)}
+        <a class="chip" href={site.store} {...ext}>Payhip store</a>
+      </div>
+    </div>
+  </section>
+</Layout>

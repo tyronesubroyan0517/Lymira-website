@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Slot from '../components/Slot.astro'
+const ext = { target: '_blank', rel: 'noopener' }
+const next = [
+  ['An anxiety journal', 'The next journal after Bloom Where You Are, with more self-care themes to follow.'],
+  ['Birthday invitations', 'Editable Canva invitations for birthdays, in the 3D Pop style.'],
+  ['Cherry On Top', 'A bachelorette high tea website set in a Paris café, in pink gingham and cherries.'],
+]
+---
+<Layout
+  title="Journal | Lymira Creations"
+  description="Stories, reflections and news from the Lymira Creations studio, including the free ebook The Last Time I Came Last."
+>
+  <section class="page-head">
+    <div class="wrap section-head">
+      <h1 data-split>Stories and reflections</h1>
+      <p class="lede" data-reveal>A short read to begin with, and news of what the studio is making next.</p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="wrap split" id="ebook">
+      <div class="split-media"><div data-parallax><Slot file="products/the-last-time-i-came-last" alt="The Last Time I Came Last ebook cover shown on a tablet" wash="lavender" arch note="Ebook cover to be placed" /></div></div>
+      <div class="stack">
+        <p class="eyebrow">Free with every store purchase</p>
+        <h2 data-split>The Last Time I Came Last</h2>
+        <p data-reveal>A short ebook with a 0 to 10 quiz, for anyone who has been last on their own list for too long. It arrives free with every purchase from the Lymira store.</p>
+        <p class="muted" data-reveal>It ends with an invitation to a free 15-minute Reconnect Call on WhatsApp. Tailor-made orders do not include the ebook.</p>
+        <div class="btn-row" data-reveal><a class="btn" href="/shop">Shop the Collection <span class="arrow" aria-hidden="true">→</span></a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-lavender">
+    <div class="wrap stack-lg">
+      <h2 data-split>Coming next from the studio</h2>
+      <div class="steps">
+        {next.map(([t, d]) => <div class="step" data-reveal><h3 style="font-size:1.6rem">{t}</h3><p>{d}</p></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap narrow stack center">
+      <h2 data-split>Her Soul Remembered</h2>
+      <p data-reveal>Longer stories are shared on our Facebook page.</p>
+      <div class="btn-row" data-reveal><a class="btn btn-ghost" href="https://facebook.com/LymiraCreations" {...ext}>Read on Facebook</a></div>
+    </div>
+  </section>
+</Layout>
