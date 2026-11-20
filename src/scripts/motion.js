@@ -60,10 +60,17 @@ function menu() {
 }
 
 function markCurrent() {
-  const path = location.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/'
+  // Works with clean URLs (/shop) and with file names (shop.html, home.html).
+  const norm = (path) => {
+    const p = path.replace(/\.html$/, '').replace(/\/(index|home)$/, '/').replace(/\/$/, '')
+    const at = p.lastIndexOf('/products/')
+    if (at >= 0) return p.slice(at)
+    return '/' + (p.split('/').pop() || '')
+  }
+  const here = norm(location.pathname)
   document.querySelectorAll('[data-nav]').forEach((a) => {
-    const href = a.getAttribute('href')
-    const on = href === '/' ? path === '/' : path === href || (href === '/shop' && path.startsWith('/products'))
+    const target = norm(new URL(a.href, location.href).pathname)
+    const on = target === '/' ? here === '/' : here === target || (target === '/shop' && here.startsWith('/products'))
     on ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')
   })
 }
