@@ -1,5 +1,8 @@
 # Artwork file names
 
+The images here were taken from the Lymira Creations Payhip store on 21 November 2026.
+Still missing: `products/christmas-as-we-lived-it` and `products/diwali-radiant-cards`.
+
 Use webp, jpg, png or svg. Rebuild after adding files.
 The hero can also be a video: `brand/hero-banner.mp4`.
 

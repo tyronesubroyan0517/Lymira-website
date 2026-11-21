@@ -206,6 +206,11 @@ main { display: block; padding-top: var(--header-h); }
 .slot.r-45 { aspect-ratio: 4 / 5; }
 .slot.r-11 { aspect-ratio: 1 / 1; }
 .slot.r-fill { height: 100%; min-height: 22rem; }
+.slot.r-natural { aspect-ratio: auto; }
+.slot.r-natural img { height: auto; }
+.slot.has-img::after { display: none; }
+.card .slot.has-img img, .show-card .slot.has-img img { object-fit: contain; }
+.card .slot.r-natural img { object-fit: cover; }
 .slot.arch { border-radius: 999px 999px var(--radius) var(--radius); }
 .slot::after { content: ''; position: absolute; inset: 0.6rem; border: 1px solid var(--line); border-radius: calc(var(--radius) - 0.4rem); pointer-events: none; }
 .slot.arch::after { border-radius: 999px 999px calc(var(--radius) - 0.4rem) calc(var(--radius) - 0.4rem); }
@@ -429,3 +434,23 @@ main { display: block; padding-top: var(--header-h); }
   .marquee { -webkit-mask-image: none; mask-image: none; }
   .split-media .slot { transform: none; }
 }
+
+/* ---------- Real artwork: hero, featured masonry, showcase cards ---------- */
+.hero.has-art .hero-grid { display: grid; gap: clamp(1.75rem, 4vw, 3rem); }
+.hero.has-art .hero-frame { min-height: 0; aspect-ratio: 1; width: 100%; max-width: 44rem; margin-inline: auto; box-shadow: 0 50px 80px -50px rgba(58, 44, 53, 0.55); }
+.hero.has-art .hero-copy { padding-top: 0; grid-template-columns: 1fr; gap: 1.5rem; }
+@media (min-width: 60rem) {
+  .hero.has-art .hero-grid { grid-template-columns: 1fr 1.05fr; align-items: center; gap: 5rem; min-height: calc(100svh - var(--header-h) - 6rem); }
+  .hero.has-art .hero-frame { order: 2; }
+  .hero.has-art .hero-tagline { font-size: clamp(4.5rem, 7.4vw, 7.5rem); }
+}
+.masonry { columns: 1; column-gap: 2rem; }
+.masonry .card { break-inside: avoid; margin-bottom: 3rem; }
+.masonry .card h3 { font-size: clamp(1.3rem, 2.4vw, 1.7rem); }
+@media (min-width: 48rem) { .masonry { columns: 2; column-gap: 2.5rem; } .masonry .card:nth-child(3) { padding-top: 5rem; } }
+.card-media { box-shadow: 0 30px 50px -36px rgba(58, 44, 53, 0.5); }
+.show-card { width: 100%; border-radius: var(--radius); transform-style: preserve-3d; box-shadow: 0 40px 60px -40px rgba(58, 44, 53, 0.6); }
+.phones { perspective: 1400px; }
+.split-media .slot.has-img img { object-fit: cover; }
+.split-media.plain { border-radius: var(--radius); max-width: 32rem; box-shadow: 0 40px 60px -40px rgba(58, 44, 53, 0.55); }
+.split-media.plain .slot { transform: none; }

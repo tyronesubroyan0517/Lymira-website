@@ -2,14 +2,14 @@
 import Layout from '../layouts/Layout.astro'
 import Dandelion from '../components/Dandelion.astro'
 import Slot from '../components/Slot.astro'
-import Sprig from '../components/Sprig.astro'
 import ProductCard from '../components/ProductCard.astro'
 import { site, categories, products, reviews } from '../data/content.js'
 import { asset, video, wa } from '../lib/assets.js'
 
 const heroImg = asset('brand/hero-banner')
 const heroVid = video('brand/hero-banner')
-const featuredOrder = ['bloom-where-you-are', 'poppys-feelings-bundle', 'hugos-kindness-bundle', 'christmas-as-we-lived-it']
+const heroAlt = 'Lymira Creations logo artwork: a gold monogram L with a bluebird, dandelions, a lantern and a girl walking a garden path, with the words Made to Reconnect'
+const featuredOrder = ['bloom-where-you-are', 'santas-coming-to-town-website', 'hugos-kindness-bundle', 'silly-goose-baby-shower-invitation']
 const featured = featuredOrder.map((s) => products.find((p) => p.slug === s))
 const showcase = products.filter((p) => p.showcase)
 const kickers = {
@@ -25,13 +25,13 @@ const ext = { target: '_blank', rel: 'noopener' }
   title="Lymira Creations | SEL Storybooks & Canva Invitations"
   description="Lymira Creations is a digital products studio: self-care journals, feelings storybooks for kids, editable Canva invitations and cards, and wedding invitation websites. Instant digital download, available worldwide."
 >
-  <section class="hero">
-    <div class="wrap">
+  <section class={`hero${heroImg ? ' has-art' : ''}`}>
+    <div class="wrap hero-grid">
       <div class="hero-frame">
         {heroVid ? (
-          <video src={heroVid} poster={heroImg} autoplay muted loop playsinline aria-label="Watercolour scene of a girl walking a path with a dandelion and a bluebird, with the Lymira Creations wordmark"></video>
+          <video src={heroVid} poster={heroImg} autoplay muted loop playsinline aria-label={heroAlt}></video>
         ) : heroImg ? (
-          <img src={heroImg} alt="Watercolour scene of a girl walking a path with a dandelion and a bluebird, with the Lymira Creations wordmark" fetchpriority="high" />
+          <img src={heroImg} alt={heroAlt} fetchpriority="high" />
         ) : (
           <>
             <div class="hero-wash"></div>
@@ -90,8 +90,8 @@ const ext = { target: '_blank', rel: 'noopener' }
       <div class="section-head">
         <h2 data-split>Featured creations</h2>
       </div>
-      <div class="bento">
-        {featured.map((p, i) => <ProductCard p={p} size={i === 0 ? 'card-hero' : ''} />)}
+      <div class="masonry">
+        {featured.map((p) => <ProductCard p={p} natural />)}
       </div>
     </div>
   </section>
@@ -106,9 +106,7 @@ const ext = { target: '_blank', rel: 'noopener' }
       <div class="phones">
         {showcase.map((p) => (
           <a class="phone-item" href={`/products/${p.slug}`}>
-            <div class="phone">
-              <Slot file={`websites/${p.slug}`} alt={p.alt} wash={p.showcase === 'Wedding' ? 'blue' : p.showcase === 'Christmas' ? 'sage' : 'rose'} ratio="" note="Screen to be placed" />
-            </div>
+            <div class="show-card"><Slot file={`products/${p.slug}`} alt={p.alt} wash="blue" ratio="r-11" note="Mockup to be placed" /></div>
             <p class="card-meta">{p.showcase}{p.comingSoon ? ' · Coming soon' : ''}</p>
             <h3>{p.title}</h3>
           </a>
@@ -144,13 +142,13 @@ const ext = { target: '_blank', rel: 'noopener' }
 
   <section class="section">
     <div class="wrap split" id="ebook">
-      <div class="split-media"><div data-parallax><Slot file="products/the-last-time-i-came-last" alt="The Last Time I Came Last ebook cover shown on a tablet" wash="lavender" arch note="Ebook cover to be placed" /></div></div>
+      <div class="split-media"><div data-parallax><Slot file="products/the-last-time-i-came-last" alt="The Last Time I Came Last ebook cover shown on a tablet" wash="lavender" arch note="Ebook cover to be placed" ratio="r-11" /></div></div>
       <div class="stack">
-        <p class="eyebrow">Free with every store purchase</p>
+        <p class="eyebrow">Free ebook</p>
         <h2 data-split>The Last Time I Came Last</h2>
-        <p data-reveal>A short ebook with a 0 to 10 quiz, for anyone who has been last on their own list for too long.</p>
-        <p class="muted" data-reveal>It ends with an invitation to a free 15-minute Reconnect Call on WhatsApp. Tailor-made orders do not include the ebook.</p>
-        <Sprig />
+        <p data-reveal>How to stop showing up for everyone except yourself. A short read with a 0 to 10 quiz.</p>
+        <p class="muted" data-reveal>It ends with an invitation to a free 15-minute Reconnect Call on WhatsApp.</p>
+        <div class="btn-row" data-reveal><a class="btn btn-ghost" href={site.ebook} {...ext}>Get the free ebook</a></div>
       </div>
     </div>
   </section>

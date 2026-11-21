@@ -121,9 +121,14 @@ function hero() {
   const words = hero.querySelectorAll('[data-split]')
   const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
   tl.fromTo(frame, { clipPath: 'inset(12% 8% 12% 8% round 220px)', scale: 1.08 }, { clipPath: 'inset(0% 0% 0% 0% round 24px)', scale: 1, duration: 1.6, ease: 'expo.inOut' })
-    .from(hero.querySelectorAll('.hero-art .stem, .hero-art .leaf'), { opacity: 0, duration: 1 }, '-=0.6')
-    .from(hero.querySelectorAll('.hero-art .seed'), { scale: 0, transformOrigin: '100px 78px', opacity: 0, duration: 1.2, stagger: { each: 0.025, from: 'random' } }, '-=0.9')
-    .from(hero.querySelector('.hero-wordmark'), { yPercent: 40, opacity: 0, duration: 1.4 }, '-=1.1')
+  const art = frame.querySelector(':scope > img, :scope > video')
+  if (art) {
+    tl.fromTo(art, { scale: 1.25 }, { scale: 1.04, duration: 2.4, ease: 'expo.out' }, 0)
+  } else {
+    tl.from(hero.querySelectorAll('.hero-art .stem, .hero-art .leaf'), { opacity: 0, duration: 1 }, '-=0.6')
+      .from(hero.querySelectorAll('.hero-art .seed'), { scale: 0, transformOrigin: '100px 78px', opacity: 0, duration: 1.2, stagger: { each: 0.025, from: 'random' } }, '-=0.9')
+      .from(hero.querySelector('.hero-wordmark'), { yPercent: 40, opacity: 0, duration: 1.4 }, '-=1.1')
+  }
   words.forEach((el) => tl.from(split(el), { yPercent: 110, duration: 1.2, stagger: 0.05 }, '-=1.1'))
   tl.from(hero.querySelectorAll('.hero-copy [data-intro]'), { y: 24, opacity: 0, duration: 1, stagger: 0.1 }, '-=0.9')
 
@@ -134,6 +139,7 @@ function hero() {
     drift.to(s, { x: 120 + Math.random() * 260, y: -60 - Math.random() * 220, rotation: 40 + Math.random() * 140, opacity: 0, ease: 'power1.in', duration: 1 }, (i % 9) * 0.06)
   })
   drift.to(frame, { yPercent: 8, scale: 0.97, ease: 'none', duration: 1.4 }, 0)
+  if (art) gsap.to(art, { yPercent: -6, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } })
 }
 
 // ---------- Home: statement that fills in word by word ----------
@@ -187,7 +193,7 @@ function phones() {
 // ---------- Cards follow the pointer slightly ----------
 function tilt() {
   if (!window.matchMedia('(hover: hover)').matches) return
-  document.querySelectorAll('.card .card-media, .phone').forEach((el) => {
+  document.querySelectorAll('.card .card-media, .show-card').forEach((el) => {
     const rx = gsap.quickTo(el, 'rotationX', { duration: 0.6, ease: 'power3' })
     const ry = gsap.quickTo(el, 'rotationY', { duration: 0.6, ease: 'power3' })
     el.addEventListener('pointermove', (e) => {

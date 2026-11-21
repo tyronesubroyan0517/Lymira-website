@@ -1,6 +1,7 @@
 // All site content lives here. Edit prices, links and copy in this file,
 // then run `npm run build`.
 //
+// Prices, titles and links match the Payhip store as read on 21 November 2026.
 // price: null  -> the page shows "See price in store" instead of a number.
 // url: null    -> the buy button links to the main Payhip store page.
 
@@ -12,6 +13,7 @@ export const site = {
     'From quiet self-care moments to milestone celebrations, creations crafted for every connection that matters.',
   domain: 'https://lymiracollective.com',
   store: 'https://payhip.com/LymiraCreations',
+  ebook: 'https://payhip.com/b/drQoC',
   whatsapp: 'https://wa.me/971501799508',
   email: 'hello@lymiracollective.com',
   legal: 'Lymira Creations is a trading name of Lymira FZ-LLC.',
@@ -77,7 +79,7 @@ export const products = [
     category: 'little-hearts',
     type: 'Storybook · Book 1',
     price: '$7.49',
-    url: null, // [CONFIRM URL]
+    url: 'https://payhip.com/b/90YtD',
     featured: false,
     line: 'A first story about big feelings.',
     problem: 'For the moments a small child feels something big and has no word for it yet.',
@@ -95,7 +97,7 @@ export const products = [
     category: 'little-hearts',
     type: 'Interactive activity book',
     price: '$5.99',
-    url: null, // [CONFIRM URL]
+    url: 'https://payhip.com/b/gdaZJ',
     line: 'Interactive activities with read-along audio.',
     problem: 'Keeps the conversation about feelings going after the story ends.',
     body: [
@@ -189,7 +191,7 @@ export const products = [
     category: 'journals',
     type: 'Self-care journal',
     price: '$8.49',
-    url: null, // [CONFIRM URL]
+    url: 'https://payhip.com/b/LctbX',
     featured: true,
     line: 'A 30-day self-care journal.',
     problem: 'For when you look after everyone else first and your own day never comes.',
@@ -209,7 +211,7 @@ export const products = [
     group: 'cards',
     type: 'Festive cards · Set of two',
     price: '$4.49',
-    url: null, // [CONFIRM URL]
+    url: 'https://payhip.com/b/sXhA4',
     featured: true,
     line: 'A greeting card and a photo card in one set.',
     problem: 'One card to say it, one to show it: your wishes and your year, sent together.',
@@ -223,12 +225,12 @@ export const products = [
   },
   {
     slug: 'diwali-radiant-cards',
-    title: 'Diwali Radiant Cards',
+    title: 'Radiant Diwali Cards',
     category: 'celebrations',
     group: 'cards',
     type: 'Radiant cards · Greeting card',
-    price: '$2.60',
-    url: null, // [CONFIRM URL]
+    price: '$2.99',
+    url: 'https://payhip.com/b/HGQqS',
     line: 'A greeting card in landscape and portrait.',
     problem: 'A Diwali greeting with detail in it, for sending to the people you cannot visit.',
     body: [
@@ -241,12 +243,12 @@ export const products = [
   },
   {
     slug: 'halloween-party-invitation',
-    title: 'Halloween Party Invitation',
+    title: 'Dreamy Pastel Halloween Party Invitation',
     category: 'celebrations',
     group: 'cards',
     type: 'Invitation · Dreamy pastel',
-    price: '$2.60',
-    url: null, // [CONFIRM URL]
+    price: '$2.49',
+    url: 'https://payhip.com/b/L0yrl',
     line: 'A dreamy pastel party invitation.',
     problem: 'A Halloween invitation that is sweet instead of scary, ready to send tonight.',
     body: [
@@ -263,8 +265,8 @@ export const products = [
     category: 'celebrations',
     group: 'cards',
     type: 'Invitation · 3D Pop',
-    price: null, // [CONFIRM]
-    url: null,
+    price: '$4.99',
+    url: 'https://payhip.com/b/pZcf9',
     line: 'A playful 3D Pop baby shower invitation.',
     problem: 'A baby shower invitation with character, for hosts who want guests to smile before they arrive.',
     body: [
@@ -283,9 +285,7 @@ export const products = [
     category: 'celebrations',
     group: 'websites',
     type: 'Invitation website · Tailor-made',
-    price: null,
-    priceNote: 'WhatsApp us for price details',
-    whatsapp: true,
+    price: '$180',
     showcase: 'Wedding',
     line: 'Designed for you, in the style you choose.',
     problem: 'Everything your guests need for the day, in one link they can open on their phone.',
@@ -300,15 +300,17 @@ export const products = [
     ],
     website: true,
     alt: 'Tailor-made wedding invitation website shown on a phone held in warm sunlight',
+    url: 'https://payhip.com/b/naBRO',
+    tailor: true,
   },
   {
     slug: 'wedding-website-template',
-    title: 'Wedding Website Invitation Template',
+    title: 'Dusty Blue Wedding Website Template',
     category: 'celebrations',
     group: 'websites',
     type: 'Invitation website · DIY Canva template',
-    price: null, // [CONFIRM]
-    url: null,
+    price: '$24',
+    url: 'https://payhip.com/b/YjBHf',
     line: 'A dusty blue wedding site to edit yourself.',
     problem: 'A wedding website you can finish in an evening, without hiring a designer.',
     body: [
@@ -321,12 +323,12 @@ export const products = [
   },
   {
     slug: 'princess-unicorn-birthday-website',
-    title: 'Princess Unicorn Birthday Invite',
+    title: 'Princess Unicorn Birthday Website Template',
     category: 'celebrations',
     group: 'websites',
     type: 'Invitation website · Canva template',
-    price: null, // [CONFIRM]
-    url: null,
+    price: '$20',
+    url: 'https://payhip.com/b/pKg0d',
     showcase: 'Birthday',
     line: "A children's birthday invitation website.",
     problem: 'A birthday invitation that keeps the time, the place and the RSVP in one link.',
@@ -340,12 +342,12 @@ export const products = [
   },
   {
     slug: 'santas-coming-to-town-website',
-    title: "Santa's Coming to Town",
+    title: 'Santa\'s Coming to Town Website Invitation',
     category: 'celebrations',
     group: 'websites',
     type: 'Invitation website · Canva template',
-    price: null, // [CONFIRM]
-    url: null,
+    price: '$20',
+    url: 'https://payhip.com/b/rJZFu',
     showcase: 'Christmas',
     line: 'A Christmas party invitation website.',
     problem: 'A Christmas party invitation guests can open, read and answer from their phone.',
@@ -359,12 +361,11 @@ export const products = [
   },
   {
     slug: 'cherry-on-top-bachelorette',
-    title: 'Cherry On Top Bachelorette High Tea',
+    title: 'Cherry On Top Bachelorette Website Invitation',
     category: 'celebrations',
     group: 'websites',
     type: 'Invitation website · Canva template',
-    price: null,
-    comingSoon: true,
+    price: '$20',
     showcase: 'Bachelorette',
     line: 'A Paris café high tea, in pink gingham and cherries.',
     problem: 'A bachelorette invitation that introduces the whole party before the day.',
@@ -375,6 +376,7 @@ export const products = [
     canva: true,
     website: true,
     alt: 'Cherry On Top bachelorette high tea invitation website shown on a phone',
+    url: 'https://payhip.com/b/huHDm',
   },
 ]
 

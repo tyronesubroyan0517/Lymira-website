@@ -3,9 +3,9 @@
 // otherwise a labelled placeholder in the brand wash.
 import { asset } from '../lib/assets.js'
 import Dandelion from './Dandelion.astro'
-const { file, alt, wash = 'sage', ratio = 'r-45', arch = false, note = 'Mockup to be placed', eager = false, class: cls = '' } = Astro.props
+const { file, alt, wash = 'sage', ratio = 'r-45', arch = false, note = 'Mockup to be placed', eager = false, natural = false, class: cls = '' } = Astro.props
 const src = file ? asset(file) : null
-const classes = `slot wash-${wash} ${ratio}${arch ? ' arch' : ''} ${cls}`
+const classes = `slot wash-${wash} ${src && natural ? 'r-natural' : ratio}${arch ? ' arch' : ''}${src ? ' has-img' : ''} ${cls}`
 ---
 {src ? (
   <div class={classes}><img src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" /></div>
