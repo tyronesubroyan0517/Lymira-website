@@ -4,7 +4,6 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
-import { createSurface } from './surface.js'
 import { createRail } from './rail.js'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -96,9 +95,10 @@ function reveals() {
   })
 
   gsap.set('[data-reveal]', { opacity: 0, y: 40 })
+  gsap.set('.card[data-reveal]', { rotationX: 22, transformPerspective: 900, transformOrigin: '50% 100%' })
   ScrollTrigger.batch('[data-reveal]', {
     start: 'top 92%',
-    onEnter: (batch) => gsap.to(batch, { opacity: 1, y: 0, duration: 1, ease: 'expo.out', stagger: 0.08, overwrite: true }),
+    onEnter: (batch) => gsap.to(batch, { opacity: 1, y: 0, rotationX: 0, duration: 1.1, ease: 'expo.out', stagger: 0.08, overwrite: true }),
   })
 
   document.querySelectorAll('[data-draw]').forEach((svg) => {
@@ -116,49 +116,56 @@ function reveals() {
   })
 }
 
-// ---------- Home: living hero, then a zoom through the artwork into the page ----------
+// ---------- Home: a cluster of real mockups floating in depth ----------
+// On load the cards arrive from far away. At rest they drift and, on a computer,
+// the whole cluster turns toward the pointer. On scroll the cards fly outward past
+// the viewer and the page continues behind them.
 function hero() {
   const hero = document.querySelector('.hero')
-  if (!hero) return
-  const frame = hero.querySelector('.hero-frame')
-  const stage = hero.querySelector('.hero-stage')
+  const scene = hero?.querySelector('.hero-scene')
+  if (!scene) return
+  const cluster = scene.querySelector('.hero-cluster')
+  const cards = gsap.utils.toArray('.float-card', scene)
   const copy = hero.querySelector('.hero-copy')
-  const mist = hero.querySelector('.hero-mist')
-  const words = hero.querySelectorAll('[data-split]')
+  scene.classList.add('js-3d')
+  cards.forEach((c) => gsap.set(c, { z: +c.dataset.z, rotation: +c.dataset.r, rotationY: +c.dataset.ry }))
 
   const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
-  tl.fromTo(frame, { clipPath: 'inset(12% 8% 12% 8% round 220px)' }, { clipPath: 'inset(0% 0% 0% 0% round 24px)', duration: 1.6, ease: 'expo.inOut' })
-  tl.fromTo(frame.querySelectorAll(':scope > img, :scope > canvas'), { scale: 1.25 }, { scale: 1, duration: 2.4 }, 0)
-  words.forEach((el) => tl.from(split(el), { yPercent: 110, duration: 1.2, stagger: 0.05 }, '-=1.9'))
-  tl.from(hero.querySelectorAll('.hero-copy [data-intro]'), { y: 24, opacity: 0, duration: 1, stagger: 0.1 }, '-=1.2')
-  if (!stage) return
+  tl.from(scene.querySelectorAll('.fc-intro'), { z: -1400, y: 160, opacity: 0, rotationX: -35, duration: 1.9, stagger: { each: 0.12, from: 'end' } }, 0.1)
+  hero.querySelectorAll('[data-split]').forEach((el) => tl.from(split(el), { yPercent: 110, duration: 1.2, stagger: 0.05 }, 0.3))
+  tl.from(hero.querySelectorAll('.hero-copy [data-intro]'), { y: 24, opacity: 0, duration: 1, stagger: 0.1 }, 0.7)
 
-  const surface = createSurface(frame)
-  if (surface) extras.push(surface)
-  const zoom = { z: 1 }
+  scene.querySelectorAll('.fc-float').forEach((el, i) => {
+    gsap.to(el, { y: i % 2 ? 14 : -14, rotation: i % 2 ? 1.2 : -1.2, duration: 3.2 + i * 0.5, ease: 'sine.inOut', yoyo: true, repeat: -1 })
+  })
 
-  // Scroll: the artwork grows to fill the screen while the view glides down the
-  // garden path, then dissolves into cream and the page continues.
-  const build = (trigger, pin, start, yShift) => {
-    const cover = () => Math.max(window.innerWidth / frame.offsetWidth, window.innerHeight / frame.offsetHeight) * 1.06
-    const xShift = () => { const r = stage.getBoundingClientRect(); return window.innerWidth / 2 - (r.left + r.width / 2) }
-    const scroll = gsap.timeline({
-      scrollTrigger: { trigger, pin, start, end: '+=120%', scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true, onToggle: (self) => stage.classList.toggle('is-flying', self.isActive) },
-    })
-    scroll
-      .to(copy, { opacity: 0, y: -40, duration: 0.3, ease: 'power1.in' }, 0)
-      .to(frame, { x: xShift, y: yShift, scale: cover, duration: 0.8, ease: 'power2.inOut' }, 0)
-      .to(zoom, { z: 2.6, duration: 1, ease: 'power1.in', onUpdate: () => surface?.setZoom(zoom.z) }, 0)
-      .to(mist, { opacity: 1, duration: 0.3, ease: 'none' }, 0.62)
-      .to(frame, { autoAlpha: 0, duration: 0.04 }, 0.94)
-      .to(mist, { opacity: 0, duration: 0.04 }, 0.96)
+  if (window.matchMedia('(hover: hover)').matches) {
+    const ry = gsap.quickTo(cluster, 'rotationY', { duration: 0.9, ease: 'power3' })
+    const rx = gsap.quickTo(cluster, 'rotationX', { duration: 0.9, ease: 'power3' })
+    const onMove = (e) => {
+      ry((e.clientX / window.innerWidth - 0.5) * 16)
+      rx(-(e.clientY / window.innerHeight - 0.5) * 10)
+    }
+    window.addEventListener('pointermove', onMove)
+    extras.push({ destroy: () => window.removeEventListener('pointermove', onMove) })
   }
-  mm.add('(min-width: 960px)', () => {
-    build(hero, hero, 'top top', () => { const r = stage.getBoundingClientRect(), h = hero.getBoundingClientRect(); return window.innerHeight / 2 - (r.top - h.top + r.height / 2) })
-  })
-  mm.add('(max-width: 959px)', () => {
-    build(stage, stage, 'center center', 0)
-  })
+
+  const build = (pin, start) => {
+    const fly = gsap.timeline({
+      scrollTrigger: { trigger: pin, pin, start, end: '+=130%', scrub: 0.7, anticipatePin: 1, onToggle: (self) => scene.classList.toggle('is-flying', self.isActive) },
+    })
+    fly.to(copy, { opacity: 0, y: -50, duration: 0.25, ease: 'power1.in' }, 0)
+    fly.to(cluster, { rotationY: 0, rotationX: 0, duration: 0.2, overwrite: 'auto' }, 0)
+    cards.forEach((c, i) => {
+      const dx = +c.dataset.cx - 50, dy = +c.dataset.cy - 50
+      const len = Math.hypot(dx, dy) || 1
+      const at = (cards.length - 1 - i) * 0.07
+      fly.to(c, { x: () => (dx / len) * window.innerWidth * 0.9 + dx * 4, y: () => (dy / len) * window.innerHeight * 0.7 + dy * 4, z: 900, rotationY: 0, rotation: (dx > 0 ? 1 : -1) * 10, duration: 0.7, ease: 'power2.in' }, at)
+      fly.to(c, { opacity: 0, duration: 0.2, ease: 'none' }, at + 0.5)
+    })
+  }
+  mm.add('(min-width: 960px)', () => build(hero, 'top top'))
+  mm.add('(max-width: 959px)', () => build(scene, 'center center'))
 }
 
 // ---------- Home: statement that fills in word by word ----------

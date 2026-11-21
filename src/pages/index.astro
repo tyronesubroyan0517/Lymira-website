@@ -1,13 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro'
-import Dandelion from '../components/Dandelion.astro'
 import Slot from '../components/Slot.astro'
 import { site, categories, products, reviews } from '../data/content.js'
 import { asset, wa } from '../lib/assets.js'
 
-const heroImg = asset('brand/hero-banner')
-const heroAlt = 'Lymira Creations logo artwork: a gold monogram L with a bluebird, dandelions, a lantern and a girl walking a garden path, with the words Made to Reconnect'
 const featuredOrder = ['halloween-party-invitation', 'poppy-and-the-garden-of-feelings', 'bloom-where-you-are', 'silly-goose-baby-shower-invitation', 'poppy-and-the-lonely-hedgehog', 'santas-coming-to-town-website', 'tailor-made-wedding-website', 'cherry-on-top-bachelorette', 'princess-unicorn-birthday-website']
+const pick = (slug) => products.find((p) => p.slug === slug)
+// The hero cluster: real mockups placed at different depths. x, y, w and h are
+// percentages of the scene; z is depth in pixels; r and ry are tilt in degrees.
+const cluster = [
+  { p: pick('bloom-where-you-are'), x: 0, y: 3, w: 60, h: 42, z: -170, r: -5, ry: 16 },
+  { p: pick('santas-coming-to-town-website'), x: 56, y: 0, w: 44, h: 41, z: -70, r: 5, ry: -18 },
+  { p: pick('poppy-and-the-lonely-hedgehog'), x: 1, y: 64, w: 54, h: 33, z: 30, r: 4, ry: 14 },
+  { p: pick('tailor-made-wedding-website'), x: 57, y: 55, w: 43, h: 40, z: -10, r: -5, ry: -15 },
+  { p: pick('silly-goose-baby-shower-invitation'), x: 27, y: 28, w: 46, h: 43, z: 150, r: -2, ry: 0 },
+]
 const featured = featuredOrder.map((s) => products.find((p) => p.slug === s))
 const showcase = products.filter((p) => p.showcase)
 const kickers = {
@@ -23,7 +30,7 @@ const ext = { target: '_blank', rel: 'noopener' }
   title="Lymira Creations | SEL Storybooks & Canva Invitations"
   description="Lymira Creations is a digital products studio: self-care journals, feelings storybooks for kids, editable Canva invitations and cards, and wedding invitation websites. Instant digital download, available worldwide."
 >
-  <section class={`hero${heroImg ? ' has-art' : ''}`}>
+  <section class="hero hero-3d">
     <div class="wrap hero-grid">
       <div class="hero-copy">
         <h1 class="sr-only">Lymira Creations</h1>
@@ -33,28 +40,16 @@ const ext = { target: '_blank', rel: 'noopener' }
           <a class="btn" href="/shop" data-intro>Shop the Collection <span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
-      <div class="hero-stage">
-        <div class="hero-frame">
-          {heroImg ? (
-            <>
-              <img src={heroImg} alt={heroAlt} fetchpriority="high" />
-              <canvas class="hero-gl" aria-hidden="true"></canvas>
-              <canvas class="hero-seeds" aria-hidden="true"></canvas>
-            </>
-          ) : (
-            <>
-              <div class="hero-wash"></div>
-              <div class="hero-placeholder">
-                <Dandelion class="hero-art" seeds={30} />
-                <p class="hero-wordmark" aria-hidden="true">Lymira Creations</p>
-              </div>
-              <p class="hero-note">Hero banner artwork to be placed</p>
-            </>
-          )}
+      <div class="hero-scene">
+        <div class="hero-cluster">
+          {cluster.map((c) => (
+            <a class="float-card" href={`/products/${c.p.slug}`} style={`--x:${c.x}%;--y:${c.y}%;--w:${c.w}%;--z:${c.z}px;--r:${c.r}deg;--ry:${c.ry}deg`} data-z={c.z} data-r={c.r} data-ry={c.ry} data-cx={c.x + c.w / 2} data-cy={c.y + c.h / 2}>
+              <span class="fc-intro"><span class="fc-float"><img src={asset(`products/${c.p.slug}`)} alt={c.p.alt} loading="eager" decoding="async" draggable="false" /></span></span>
+            </a>
+          ))}
         </div>
       </div>
     </div>
-    <div class="hero-mist" aria-hidden="true"></div>
   </section>
 
   <section class="section band-paper">

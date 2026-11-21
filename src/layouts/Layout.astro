@@ -12,7 +12,7 @@ const NAV = [
   ['/shop', 'Shop'],
   ['/tailor-made', 'Tailor-Made'],
   ['/about', 'About'],
-  ['/journal', 'Journal'],
+  ['/stories', 'Stories'],
   ['/contact', 'Contact'],
 ]
 const ext = { target: '_blank', rel: 'noopener' }
@@ -68,7 +68,14 @@ const pageTransition = {
     </div>
     <div class="menu-panel" id="menu-panel" hidden>
       <nav class="wrap" aria-label="Main">
-        <ul>{NAV.map(([href, label]) => <li><a href={href} data-nav>{label}</a></li>)}</ul>
+        <ul>
+          {NAV.map(([href, label]) => (
+            <li>
+              <a href={href} data-nav>{label}</a>
+              {href === '/shop' && <span class="menu-sub">{categories.map((c) => <a href={`/shop#${c.id}`}>{c.name}</a>)}</span>}
+            </li>
+          ))}
+        </ul>
         <p class="menu-foot"><a href={site.whatsapp} {...ext}>WhatsApp</a><a href={`mailto:${site.email}`}>Email</a><a href={site.store} {...ext}>Payhip store</a></p>
       </nav>
     </div>
@@ -87,7 +94,7 @@ const pageTransition = {
       </div>
       <div class="footer-cols">
         <div><h2>Shop</h2><ul>{categories.map((c) => <li><a href={`/shop#${c.id}`}>{c.name}</a></li>)}</ul></div>
-        <div><h2>Studio</h2><ul><li><a href="/about">About</a></li><li><a href="/tailor-made">Tailor-made designs</a></li><li><a href="/journal">Journal</a></li><li><a href={site.store} {...ext}>Payhip store</a></li></ul></div>
+        <div><h2>Studio</h2><ul><li><a href="/about">About</a></li><li><a href="/tailor-made">Tailor-made designs</a></li><li><a href="/stories">Stories</a></li><li><a href={site.store} {...ext}>Payhip store</a></li></ul></div>
         <div><h2>Follow</h2><ul>{site.social.map((s) => <li><a href={s.url} {...ext}>{s.label}</a></li>)}</ul></div>
         <div><h2>Contact</h2><ul><li><a href={site.whatsapp} {...ext}>WhatsApp</a></li><li><a href={`mailto:${site.email}`}>hello<wbr />@lymiracollective.com</a></li></ul></div>
       </div>
