@@ -265,7 +265,25 @@ function teardown() {
   mm = null
 }
 
+// Buy buttons hand the product to Payhip's script, which takes the buyer straight to
+// Payhip's payment page (skipping the product page). If the script
+// has not loaded, the link opens the Payhip product page as usual.
+function checkout() {
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest?.('a[data-payhip]')
+    const open = window.Payhip?.Checkout?.open
+    if (!link || !open) return
+    try {
+      window.Payhip.Checkout.open({ product: link.dataset.payhip })
+      e.preventDefault()
+    } catch {
+      /* fall through to the normal link */
+    }
+  })
+}
+
 export function boot() {
+  checkout()
   document.addEventListener('astro:page-load', init)
   document.addEventListener('astro:before-swap', teardown)
 }

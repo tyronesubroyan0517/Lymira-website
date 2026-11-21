@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro'
 import Slot from '../../components/Slot.astro'
 import ProductCard from '../../components/ProductCard.astro'
 import { site, categories, products } from '../../data/content.js'
-import { wa, asset } from '../../lib/assets.js'
+import { wa, asset, payhipKey } from '../../lib/assets.js'
 
 export function getStaticPaths() {
   return products.map((p) => ({ params: { slug: p.slug }, props: { p } }))
@@ -16,7 +16,7 @@ const related = products.filter((x) => x.category === p.category && x.slug !== p
 
 let buy
 if (p.comingSoon) buy = { href: wa(site.whatsapp, `Hello Lymira Creations, please let me know when ${p.title} is available.`), label: 'Tell me when it is ready', ghost: true }
-else buy = { href: p.url || site.store, label: p.price ? 'Buy now' : 'See price and buy' }
+else buy = { href: p.url || site.store, label: p.price ? 'Buy now' : 'See price and buy', key: p.payhipPage ? null : payhipKey(p.url) }
 
 const sections = [{ title: 'What you will receive', items: p.receive, open: true }]
 if (p.canva)
@@ -73,9 +73,9 @@ if (p.poppy)
         {p.body.map((b) => <p>{b}</p>)}
         <div class="btn-row">
           {p.tailor && <a class="btn btn-ghost" href={wa(site.whatsapp, `Hello Lymira Creations, I have a question about the ${p.title}.`)} {...ext}>Ask on WhatsApp</a>}
-          <a class={buy.ghost ? 'btn btn-ghost' : 'btn'} href={buy.href} {...ext}>{buy.label} <span class="arrow" aria-hidden="true">→</span></a>
+          <a class={buy.ghost ? 'btn btn-ghost' : 'btn'} href={buy.href} data-payhip={buy.key} {...ext}>{buy.label} <span class="arrow" aria-hidden="true">→</span></a>
         </div>
-        <p class="assure">{p.tailor ? <><span>Tailor-made for you</span><span>Available worldwide</span><span>Secure checkout on Payhip</span></> : <><span>Instant digital download</span><span>Available worldwide</span><span>Secure checkout on Payhip</span></>}</p>
+        <p class="assure">{p.tailor ? <><span>Tailor-made for you</span><span>Available worldwide</span><span>Secure checkout by Payhip</span></> : <><span>Instant digital download</span><span>Available worldwide</span><span>Secure checkout by Payhip</span></>}</p>
         <div class="details">
           {sections.map((s) => (
             <details open={s.open}>

@@ -4,6 +4,8 @@
 // Prices, titles and links match the Payhip store as read on 21 November 2026.
 // price: null  -> the page shows "See price in store" instead of a number.
 // url: null    -> the buy button links to the main Payhip store page.
+// Buy buttons go straight to Payhip's payment page. payhipPage: true
+// sends the buyer to the Payhip product page instead.
 
 export const site = {
   name: 'Lymira Creations',
@@ -127,6 +129,8 @@ export const products = [
     ],
     poppy: true,
     alt: "Poppy's Feelings Bundle, the storybook and activity book shown side by side on two devices",
+    // Bundles use Payhip pricing plans, which Payhip's buy-button script does not support.
+    payhipPage: true,
   },
   {
     slug: 'poppy-and-the-lonely-hedgehog',
@@ -181,6 +185,8 @@ export const products = [
     ],
     poppy: true,
     alt: "Hugo's Kindness Bundle, the storybook and activity book shown together on two devices",
+    // Bundles use Payhip pricing plans, which Payhip's buy-button script does not support.
+    payhipPage: true,
   },
 
   // ---------------- Journals & Reflection ----------------

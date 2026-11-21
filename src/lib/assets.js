@@ -20,3 +20,6 @@ export function video(rel) {
 }
 
 export const wa = (whatsapp, text) => `${whatsapp}?text=${encodeURIComponent(text)}`
+
+// The Payhip product key from a product link, e.g. https://payhip.com/b/LctbX -> LctbX.
+export const payhipKey = (url) => (url && url.match(/payhip\.com\/b\/([A-Za-z0-9]+)/)?.[1]) || null
