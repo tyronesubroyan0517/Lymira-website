@@ -116,56 +116,48 @@ function reveals() {
   })
 }
 
-// ---------- Home: a cluster of real mockups floating in depth ----------
-// On load the cards arrive from far away. At rest they drift and, on a computer,
-// the whole cluster turns toward the pointer. On scroll the cards fly outward past
-// the viewer and the page continues behind them.
+// ---------- Home: the garden hero ----------
+// The lady and the lantern settle in from the sides, the lettering rises, the
+// lantern flickers and the butterflies wander for as long as the page is open.
 function hero() {
-  const hero = document.querySelector('.hero')
-  const scene = hero?.querySelector('.hero-scene')
-  if (!scene) return
-  const cluster = scene.querySelector('.hero-cluster')
-  const cards = gsap.utils.toArray('.float-card', scene)
-  const copy = hero.querySelector('.hero-copy')
-  scene.classList.add('js-3d')
-  cards.forEach((c) => gsap.set(c, { z: +c.dataset.z, rotation: +c.dataset.r, rotationY: +c.dataset.ry }))
-
+  const hero = document.querySelector('.hero-garden')
+  if (!hero) return
+  const girl = hero.querySelector('.hero-girl'), lantern = hero.querySelector('.hero-lantern')
   const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
-  tl.from(scene.querySelectorAll('.fc-intro'), { z: -1400, y: 160, opacity: 0, rotationX: -35, duration: 1.9, stagger: { each: 0.12, from: 'end' } }, 0.1)
-  hero.querySelectorAll('[data-split]').forEach((el) => tl.from(split(el), { yPercent: 110, duration: 1.2, stagger: 0.05 }, 0.3))
-  tl.from(hero.querySelectorAll('.hero-copy [data-intro]'), { y: 24, opacity: 0, duration: 1, stagger: 0.1 }, 0.7)
+  tl.from(hero.querySelector('.hero-mono'), { scale: 0.6, opacity: 0, rotation: -12, duration: 1.6 }, 0.1)
+    .from(hero.querySelectorAll('.hero-title span'), { yPercent: 60, opacity: 0, duration: 1.3, stagger: 0.12 }, 0.35)
+    .from(hero.querySelector('.hero-made'), { y: 20, opacity: 0, duration: 1.1 }, 0.7)
+    .from(hero.querySelectorAll('[data-intro]'), { y: 24, opacity: 0, duration: 1, stagger: 0.12 }, 0.9)
+    .from(girl, { xPercent: -30, opacity: 0, duration: 2 }, 0.3)
+    .from(lantern, { xPercent: 30, opacity: 0, duration: 2 }, 0.45)
 
-  scene.querySelectorAll('.fc-float').forEach((el, i) => {
-    gsap.to(el, { y: i % 2 ? 14 : -14, rotation: i % 2 ? 1.2 : -1.2, duration: 3.2 + i * 0.5, ease: 'sine.inOut', yoyo: true, repeat: -1 })
+  // The lady drifts as if mid-step; the lantern sways.
+  gsap.to(girl, { y: -7, rotation: 0.6, duration: 1.1, ease: 'sine.inOut', yoyo: true, repeat: -1, transformOrigin: '50% 100%' })
+  gsap.to(lantern, { rotation: 1.6, duration: 2.8, ease: 'sine.inOut', yoyo: true, repeat: -1, transformOrigin: '50% 0%' })
+
+  // Butterflies pick a new spot, fly there, rest a moment, and go again.
+  const flies = gsap.utils.toArray('.butterfly', hero)
+  let alive = true
+  const wander = (el, first) => {
+    if (!alive) return
+    const w = hero.offsetWidth, h = hero.offsetHeight
+    const x = gsap.utils.random(0.04, 0.9) * w, y = gsap.utils.random(0.12, 0.85) * h
+    const from = { x: gsap.getProperty(el, 'x'), y: gsap.getProperty(el, 'y') }
+    const angle = Math.atan2(y - from.y, x - from.x) * (180 / Math.PI) + 90
+    gsap.to(el, { rotation: gsap.utils.clamp(-50, 50, angle > 180 ? angle - 360 : angle), duration: 0.6, ease: 'sine.out' })
+    gsap.to(el, { x, y, duration: gsap.utils.random(4, 7.5), ease: 'sine.inOut', delay: first ? gsap.utils.random(0, 1.5) : gsap.utils.random(0.2, 1.4), onComplete: () => wander(el) })
+  }
+  flies.forEach((el, i) => {
+    gsap.set(el, { x: (i % 2 ? 0.8 : 0.1) * hero.offsetWidth, y: gsap.utils.random(0.2, 0.7) * hero.offsetHeight, scale: gsap.utils.random(0.7, 1.15) })
+    gsap.from(el, { opacity: 0, duration: 1.5, delay: 0.8 + i * 0.2 })
+    wander(el, true)
   })
+  extras.push({ destroy: () => { alive = false; gsap.killTweensOf(flies) } })
 
-  if (window.matchMedia('(hover: hover)').matches) {
-    const ry = gsap.quickTo(cluster, 'rotationY', { duration: 0.9, ease: 'power3' })
-    const rx = gsap.quickTo(cluster, 'rotationX', { duration: 0.9, ease: 'power3' })
-    const onMove = (e) => {
-      ry((e.clientX / window.innerWidth - 0.5) * 16)
-      rx(-(e.clientY / window.innerHeight - 0.5) * 10)
-    }
-    window.addEventListener('pointermove', onMove)
-    extras.push({ destroy: () => window.removeEventListener('pointermove', onMove) })
-  }
-
-  const build = (pin, start) => {
-    const fly = gsap.timeline({
-      scrollTrigger: { trigger: pin, pin, start, end: '+=130%', scrub: 0.7, anticipatePin: 1, onToggle: (self) => scene.classList.toggle('is-flying', self.isActive) },
-    })
-    fly.to(copy, { opacity: 0, y: -50, duration: 0.25, ease: 'power1.in' }, 0)
-    fly.to(cluster, { rotationY: 0, rotationX: 0, duration: 0.2, overwrite: 'auto' }, 0)
-    cards.forEach((c, i) => {
-      const dx = +c.dataset.cx - 50, dy = +c.dataset.cy - 50
-      const len = Math.hypot(dx, dy) || 1
-      const at = (cards.length - 1 - i) * 0.07
-      fly.to(c, { x: () => (dx / len) * window.innerWidth * 0.9 + dx * 4, y: () => (dy / len) * window.innerHeight * 0.7 + dy * 4, z: 900, rotationY: 0, rotation: (dx > 0 ? 1 : -1) * 10, duration: 0.7, ease: 'power2.in' }, at)
-      fly.to(c, { opacity: 0, duration: 0.2, ease: 'none' }, at + 0.5)
-    })
-  }
-  mm.add('(min-width: 960px)', () => build(hero, 'top top'))
-  mm.add('(max-width: 959px)', () => build(scene, 'center center'))
+  // Depth on scroll: the scene falls away at different speeds.
+  const depth = { trigger: hero, start: 'top top', end: 'bottom top', scrub: true }
+  gsap.to(hero.querySelector('.hero-center'), { yPercent: -12, ease: 'none', scrollTrigger: depth })
+  gsap.to(hero.querySelectorAll('.hero-girl, .hero-lantern img'), { yPercent: 10, scale: 1.08, ease: 'none', scrollTrigger: depth })
 }
 
 // ---------- Home: statement that fills in word by word ----------

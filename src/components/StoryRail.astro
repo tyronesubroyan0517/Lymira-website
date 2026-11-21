@@ -1,0 +1,18 @@
+---
+import { story } from '../data/story.js'
+---
+<div class="rail rail-story" data-start="0" role="group" aria-roledescription="carousel" aria-label="The Lymira story in ten slides">
+  <div class="rail-stage">
+    {story.map((text, i) => (
+      <div class="card rail-card">
+        <div class="card-media"><img src={`/assets/story/${String(i + 1).padStart(2, '0')}.webp`} alt={text} loading={i < 3 ? 'eager' : 'lazy'} decoding="async" draggable="false" /></div>
+        <div class="rail-caption"><p class="card-meta">{i + 1} of {story.length}</p></div>
+      </div>
+    ))}
+  </div>
+  <div class="rail-nav">
+    <button type="button" class="rail-btn" data-rail="-1" aria-label="Previous slide">←</button>
+    <span class="card-meta">Swipe or use the arrows</span>
+    <button type="button" class="rail-btn" data-rail="1" aria-label="Next slide">→</button>
+  </div>
+</div>

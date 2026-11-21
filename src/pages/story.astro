@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Slot from '../components/Slot.astro'
+import StoryRail from '../components/StoryRail.astro'
+const ext = { target: '_blank', rel: 'noopener' }
+---
+<Layout
+  title="Our Story | Lymira Creations"
+  description="How Lymira Creations began: nearly two decades of teaching across three continents, the words “I’m done”, and a first journal called Bloom Where You Are."
+>
+  <section class="page-head">
+    <div class="wrap section-head center" style="text-align:center">
+      <p class="eyebrow">Our story</p>
+      <h1 data-split>For years I said “I’m done.” Then life finally listened.</h1>
+      <p class="lede" data-reveal>How Lymira began, told in ten pages.</p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <StoryRail />
+    <div class="wrap stack center" style="padding-top:2.5rem" data-reveal>
+      <div class="btn-row"><a class="btn" href="/shop">Shop the Collection <span class="arrow" aria-hidden="true">→</span></a><a class="btn btn-ghost" href="/about">Meet Yuri</a></div>
+    </div>
+  </section>
+
+  <section class="section band-lavender">
+    <div class="wrap split" id="ebook">
+      <div class="split-media"><div data-parallax><Slot file="products/the-last-time-i-came-last" alt="The Last Time I Came Last ebook cover" wash="lavender" arch note="Ebook cover to be placed" ratio="r-11" /></div></div>
+      <div class="stack">
+        <p class="eyebrow">Free ebook</p>
+        <h2 data-split>The Last Time I Came Last</h2>
+        <p data-reveal>How to stop showing up for everyone except yourself. A short read with a 0 to 10 quiz, free to download from the Lymira store.</p>
+        <p class="muted" data-reveal>It ends with an invitation to a free 15-minute Reconnect Call on WhatsApp.</p>
+        <div class="btn-row" data-reveal><a class="btn" href="https://payhip.com/b/drQoC" data-payhip="drQoC" {...ext}>Get the free ebook <span class="arrow" aria-hidden="true">→</span></a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap narrow stack center">
+      <h2 data-split>Her Soul Remembered</h2>
+      <p class="lede" data-reveal>A soulful space for the woman who is learning to remember herself.</p>
+      <div class="btn-row" data-reveal><a class="btn btn-ghost" href="https://facebook.com/LymiraCreations" {...ext}>Read her story</a></div>
+    </div>
+  </section>
+</Layout>

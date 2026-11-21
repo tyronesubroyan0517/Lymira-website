@@ -10,9 +10,8 @@ const canonical = new URL(Astro.url.pathname.replace(/\/index$/, '/'), site.doma
 const NAV = [
   ['/', 'Home'],
   ['/shop', 'Shop'],
-  ['/tailor-made', 'Tailor-Made'],
+  ['/story', 'Story'],
   ['/about', 'About'],
-  ['/stories', 'Stories'],
   ['/contact', 'Contact'],
 ]
 const ext = { target: '_blank', rel: 'noopener' }
@@ -42,7 +41,7 @@ const pageTransition = {
   <meta property="og:url" content={canonical} />
   <meta name="theme-color" content="#FCF5EB" />
   <link rel="icon" type="image/png" href="/assets/brand/favicon.png" />
-  <meta property="og:image" content={new URL('/assets/brand/hero-banner.webp', site.domain).href} />
+  <meta property="og:image" content={new URL('/assets/brand/about-artwork.webp', site.domain).href} />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=EB+Garamond:wght@500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" />
@@ -95,7 +94,7 @@ const pageTransition = {
       </div>
       <div class="footer-cols">
         <div><h2>Shop</h2><ul>{categories.map((c) => <li><a href={`/shop#${c.id}`}>{c.name}</a></li>)}</ul></div>
-        <div><h2>Studio</h2><ul><li><a href="/about">About</a></li><li><a href="/tailor-made">Tailor-made designs</a></li><li><a href="/stories">Stories</a></li><li><a href={site.store} {...ext}>Payhip store</a></li></ul></div>
+        <div><h2>Studio</h2><ul><li><a href="/about">About</a></li><li><a href="/tailor-made">Tailor-made designs</a></li><li><a href="/story">Our story</a></li><li><a href={site.store} {...ext}>Payhip store</a></li></ul></div>
         <div><h2>Follow</h2><ul>{site.social.map((s) => <li><a href={s.url} {...ext}>{s.label}</a></li>)}</ul></div>
         <div><h2>Contact</h2><ul><li><a href={site.whatsapp} {...ext}>WhatsApp</a></li><li><a href={`mailto:${site.email}`}>hello<wbr />@lymiracollective.com</a></li></ul></div>
       </div>

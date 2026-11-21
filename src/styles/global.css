@@ -435,27 +435,77 @@ main { display: block; padding-top: var(--header-h); }
   .split-media .slot { transform: none; }
 }
 
-/* ---------- Hero: mockups floating in depth ---------- */
-.hero { position: relative; overflow-x: clip; }
-.hero-3d .hero-grid { display: grid; gap: clamp(2rem, 5vw, 3rem); }
-.hero-3d .hero-copy { padding-top: 0.75rem; grid-template-columns: 1fr; gap: 1.25rem; }
-.hero-3d .hero-tagline { font-size: min(12.4vw, 4.2rem); white-space: nowrap; }
-.hero-scene { position: relative; width: 100%; max-width: 40rem; margin-inline: auto; perspective: 1200px; }
-.hero-scene.is-flying { z-index: 30; }
-.hero-cluster { position: relative; aspect-ratio: 1 / 1.06; transform-style: preserve-3d; }
-.float-card {
-  position: absolute; left: var(--x); top: var(--y); width: var(--w); display: block; transform-style: preserve-3d;
-  transform: translateZ(var(--z)) rotate(var(--r)) rotateY(var(--ry)); will-change: transform;
+/* ---------- Watercolour ground, as on the Canva pages ---------- */
+body { background: transparent; }
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(70% 42% at 0% 0%, rgba(168, 191, 206, 0.62), transparent 72%),
+    radial-gradient(60% 46% at 100% 8%, rgba(240, 190, 186, 0.5), transparent 72%),
+    radial-gradient(64% 44% at 100% 100%, rgba(195, 184, 217, 0.42), transparent 72%),
+    radial-gradient(56% 40% at 0% 100%, rgba(244, 214, 206, 0.6), transparent 72%),
+    var(--cream);
 }
-.js-3d .float-card { transform: none; }
-.fc-intro, .fc-float { display: block; transform-style: preserve-3d; }
-.float-card img { width: 100%; height: auto; border-radius: 18px; box-shadow: 0 40px 60px -30px rgba(58, 44, 53, 0.6), 0 0 0 1px rgba(255, 251, 244, 0.6); }
+.band-paper, .worlds { background: rgba(255, 251, 244, 0.72); }
+.band-sage { background: rgba(229, 235, 220, 0.74); }
+.band-blue { background: rgba(223, 232, 238, 0.74); }
+.band-lavender { background: rgba(234, 228, 241, 0.74); }
+.band-rose { background: rgba(244, 224, 219, 0.74); }
+
+/* ---------- Hero: the garden scene ---------- */
+.hero-garden { position: relative; overflow: hidden; min-height: 100svh; padding-top: calc(var(--header-h) + 0.75rem); padding-bottom: 0; display: flex; flex-direction: column; }
+.hero-center { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.7rem; padding-bottom: clamp(11rem, 44vw, 14rem); }
+.hero-mono { width: clamp(6.5rem, 24vw, 11rem); height: auto; filter: drop-shadow(0 18px 22px rgba(58, 44, 53, 0.22)); }
+.hero-title { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; color: var(--sage-deep); text-transform: uppercase; line-height: 1; }
+.ht-name { font-family: var(--display); font-weight: 500; font-size: clamp(3rem, 13vw, 6.8rem); letter-spacing: 0.1em; margin-right: -0.1em; text-shadow: 0 2px 0 rgba(255, 251, 244, 0.8), 0 10px 24px rgba(86, 112, 79, 0.2); }
+.ht-sub { font-family: var(--label); font-size: clamp(0.95rem, 3.6vw, 1.7rem); letter-spacing: 0.52em; margin-right: -0.52em; color: var(--gold-ink); }
+.hero-made { font-family: var(--display); font-size: clamp(1.3rem, 4.6vw, 2.1rem); color: var(--sage-deep); display: flex; align-items: baseline; gap: 0.5rem; }
+.hero-made .script { font-size: 1.9em; color: var(--rose-deep); line-height: 0.9; }
+.hero-garden .lede { max-width: 30rem; font-size: 1.08em; }
+.hero-garden .btn-row { justify-content: center; }
+.hero-garden .btn { min-height: 3.1rem; padding-inline: 1.5rem; font-size: 0.8125rem; }
+.hero-garden .btn-ghost { background: rgba(255, 251, 244, 0.7); }
+.hero-girl, .hero-lantern { position: absolute; bottom: 0; z-index: 1; height: auto; pointer-events: none; }
+.hero-girl { left: -4%; width: clamp(11rem, 50vw, 30rem); }
+.hero-lantern { right: -5%; width: clamp(9.5rem, 44vw, 26rem); }
+.hero-lantern img { width: 100%; height: auto; }
+.lantern-glow { position: absolute; left: 50%; top: 68%; width: 70%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(255, 214, 140, 0.75), rgba(255, 214, 140, 0) 65%); mix-blend-mode: screen; animation: flicker 3.2s ease-in-out infinite; }
+@keyframes flicker { 0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); } 22% { opacity: 0.9; } 40% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.06); } 63% { opacity: 1; } 80% { opacity: 0.7; transform: translate(-50%, -50%) scale(0.97); } }
+.butterflies { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.butterfly { position: absolute; left: 0; top: 0; width: clamp(1.7rem, 5vw, 2.6rem); margin: -1rem 0 0 -1rem; filter: drop-shadow(0 6px 6px rgba(58, 44, 53, 0.18)); }
+.butterfly svg { width: 100%; height: auto; overflow: visible; }
+.butterfly .wing { transform-origin: 30px 24px; animation: flap 0.36s ease-in-out infinite alternate; }
+.butterfly .wing-r { animation-delay: 0.02s; }
+@keyframes flap { from { transform: scaleX(1); } to { transform: scaleX(0.25); } }
+.butterfly .upper { fill: #F3D9A4; stroke: #C99A55; stroke-width: 1; }
+.butterfly .lower { fill: #F8E7C4; stroke: #C99A55; stroke-width: 1; }
+.butterfly .body { stroke: #7A5A34; stroke-width: 2; stroke-linecap: round; fill: none; }
+.butterfly.tone-rose .upper { fill: #F2C4C0; stroke: #C97C7C; }
+.butterfly.tone-rose .lower { fill: #F9DEDA; stroke: #C97C7C; }
+.butterfly.tone-blue .upper { fill: #C4D6E2; stroke: #7F9DB3; }
+.butterfly.tone-blue .lower { fill: #DDE8EF; stroke: #7F9DB3; }
 @media (min-width: 60rem) {
-  .hero-3d { padding-bottom: 2rem; }
-  .hero-3d .hero-grid { grid-template-columns: 0.9fr 1.1fr; align-items: center; gap: 4rem; min-height: calc(100svh - var(--header-h) - 2.5rem); }
-  .hero-3d .hero-scene { max-width: min(42rem, calc((100svh - var(--header-h) - 6rem) / 1.06)); }
-  .hero-3d .hero-tagline { font-size: clamp(4.5rem, 7.4vw, 7.5rem); white-space: normal; }
+  .hero-center { padding-bottom: 4rem; gap: 0.9rem; justify-content: center; flex: 1; }
+  .hero-girl { left: 0; width: min(31vw, 30rem); }
+  .hero-lantern { right: 1%; width: min(25vw, 24rem); }
 }
+
+/* ---------- Hi, I'm Yuri ---------- */
+.yuri-grid { display: grid; gap: 2rem; align-items: center; }
+.yuri-photo { width: min(72vw, 22rem); margin-inline: auto; }
+.yuri-photo img { width: 100%; height: auto; border-radius: 50%; box-shadow: 0 40px 60px -36px rgba(58, 44, 53, 0.55); }
+.yuri-hi { font-size: 1.5em; color: var(--rose-deep); padding-right: 0.15em; }
+.yuri h2, .yuri-grid h1 { font-size: clamp(2.4rem, 7vw, 4.2rem); }
+.yuri-aside { font-family: var(--display); font-style: italic; font-size: 1.15rem; color: var(--rose-text); padding-left: 1.1rem; border-left: 1px solid var(--gold); }
+@media (min-width: 60rem) { .yuri-grid { grid-template-columns: 0.75fr 1fr; gap: 5rem; } .yuri-photo { width: min(100%, 27rem); } }
+
+/* ---------- Story slides on the 3D rail ---------- */
+.rail-story { --card: clamp(15rem, 70vw, 24rem); }
+.rail-story .rail-card .card-media { aspect-ratio: 738 / 922; }
+.rail-story.is-3d .rail-stage { height: calc(var(--card) * 1.25 + 4rem); }
+
+@media (prefers-reduced-motion: reduce) { .butterfly .wing, .lantern-glow { animation: none; } }
+
 .menu-sub { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; padding: 0.4rem 0 0.9rem; }
 .menu-panel .menu-sub a { font-family: var(--label); font-size: 0.8125rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sage-deep); text-decoration: none; }
 

@@ -1,20 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Slot from '../components/Slot.astro'
+import Butterfly from '../components/Butterfly.astro'
 import { site, categories, products, reviews } from '../data/content.js'
 import { asset, wa } from '../lib/assets.js'
 
 const featuredOrder = ['halloween-party-invitation', 'poppy-and-the-garden-of-feelings', 'bloom-where-you-are', 'silly-goose-baby-shower-invitation', 'poppy-and-the-lonely-hedgehog', 'santas-coming-to-town-website', 'tailor-made-wedding-website', 'cherry-on-top-bachelorette', 'princess-unicorn-birthday-website']
 const pick = (slug) => products.find((p) => p.slug === slug)
-// The hero cluster: real mockups placed at different depths. x, y, w and h are
-// percentages of the scene; z is depth in pixels; r and ry are tilt in degrees.
-const cluster = [
-  { p: pick('bloom-where-you-are'), x: 0, y: 3, w: 60, h: 42, z: -170, r: -5, ry: 16 },
-  { p: pick('santas-coming-to-town-website'), x: 56, y: 0, w: 44, h: 41, z: -70, r: 5, ry: -18 },
-  { p: pick('poppy-and-the-lonely-hedgehog'), x: 1, y: 64, w: 54, h: 33, z: 30, r: 4, ry: 14 },
-  { p: pick('tailor-made-wedding-website'), x: 57, y: 55, w: 43, h: 40, z: -10, r: -5, ry: -15 },
-  { p: pick('silly-goose-baby-shower-invitation'), x: 27, y: 28, w: 46, h: 43, z: 150, r: -2, ry: 0 },
-]
 const featured = featuredOrder.map((s) => products.find((p) => p.slug === s))
 const showcase = products.filter((p) => p.showcase)
 const kickers = {
@@ -30,34 +22,36 @@ const ext = { target: '_blank', rel: 'noopener' }
   title="Lymira Creations | SEL Storybooks & Canva Invitations"
   description="Lymira Creations is a digital products studio: self-care journals, feelings storybooks for kids, editable Canva invitations and cards, and wedding invitation websites. Instant digital download, available worldwide."
 >
-  <section class="hero hero-3d">
-    <div class="wrap hero-grid">
-      <div class="hero-copy">
-        <h1 class="sr-only">Lymira Creations</h1>
-        <p class="hero-tagline" data-split>Made to Reconnect</p>
-        <div class="hero-side">
-          <p class="lede" data-intro>{site.subtagline}</p>
-          <a class="btn" href="/shop" data-intro>Shop the Collection <span class="arrow" aria-hidden="true">→</span></a>
-        </div>
-      </div>
-      <div class="hero-scene">
-        <div class="hero-cluster">
-          {cluster.map((c) => (
-            <a class="float-card" href={`/products/${c.p.slug}`} style={`--x:${c.x}%;--y:${c.y}%;--w:${c.w}%;--z:${c.z}px;--r:${c.r}deg;--ry:${c.ry}deg`} data-z={c.z} data-r={c.r} data-ry={c.ry} data-cx={c.x + c.w / 2} data-cy={c.y + c.h / 2}>
-              <span class="fc-intro"><span class="fc-float"><img src={asset(`products/${c.p.slug}`)} alt={c.p.alt} loading="eager" decoding="async" draggable="false" /></span></span>
-            </a>
-          ))}
-        </div>
+  <section class="hero hero-garden">
+    <img class="hero-girl" src="/assets/brand/hero-girl.webp" alt="" width="689" height="900" />
+    <div class="hero-lantern">
+      <img src="/assets/brand/hero-lantern.webp" alt="" width="616" height="900" />
+      <span class="lantern-glow"></span>
+    </div>
+    <div class="butterflies" aria-hidden="true">
+      <Butterfly tone="gold" /><Butterfly tone="rose" /><Butterfly tone="gold" /><Butterfly tone="blue" /><Butterfly tone="rose" />
+    </div>
+    <div class="wrap hero-center">
+      <img class="hero-mono" src="/assets/brand/monogram.webp" alt="" width="480" height="480" />
+      <h1 class="hero-title"><span class="ht-name">Lymira</span><span class="ht-sub">Creations</span></h1>
+      <p class="hero-made">Made to <span class="script">Reconnect</span></p>
+      <p class="lede" data-intro>{site.subtagline}</p>
+      <div class="btn-row" data-intro>
+        <a class="btn" href="/shop">Shop the Collection</a>
+        <a class="btn btn-ghost" href="/story">Read Her Story</a>
       </div>
     </div>
   </section>
 
-  <section class="section band-paper">
-    <div class="wrap">
-      <p class="statement" data-fill>Journals, storybooks and invitations, crafted by a former teacher with 18 years in classrooms across three continents.</p>
-      <div class="statement-foot" data-reveal>
-        <p class="muted">Lymira began with one self-care journal, Bloom Where You Are. Every creation since is an instant digital download, available worldwide.</p>
-        <a class="text-link" href="/about">Read our story</a>
+  <section class="section yuri">
+    <div class="wrap yuri-grid">
+      <div class="yuri-photo" data-reveal><img src="/assets/brand/yuri.webp" alt="Yuri, creator of Lymira Creations" width="900" height="900" loading="lazy" /></div>
+      <div class="stack">
+        <h2><span class="script yuri-hi">Hi,</span> I’m Yuri</h2>
+        <p class="lede" data-reveal>I’m the creator of Lymira Creations. For years I said “I’m done.” Then life finally listened.</p>
+        <p data-reveal>After nearly two decades of teaching across three continents, I began making what I wished I’d had: a journal to slow down with, stories that help children name their feelings, and invitations for every celebration worth gathering for.</p>
+        <p class="yuri-aside" data-reveal>If those words have been on your lips too, pay attention. They might be leading you somewhere beautiful.</p>
+        <div class="btn-row" data-reveal><a class="btn btn-ghost" href="/story">Read my full story <span class="arrow" aria-hidden="true">→</span></a></div>
       </div>
     </div>
   </section>

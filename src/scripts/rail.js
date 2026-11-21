@@ -11,7 +11,7 @@ export function createRail(root) {
   root.classList.add('is-3d')
 
   const n = cards.length
-  const state = { pos: Math.min(2, n - 1) }
+  const state = { pos: Math.min(root.dataset.start ? +root.dataset.start : 2, n - 1) }
   const clampPos = (v) => Math.max(0, Math.min(n - 1, v))
 
   const render = () => {
