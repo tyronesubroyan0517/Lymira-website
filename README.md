@@ -27,7 +27,9 @@ sends the buy button to the main Payhip store page.
 
 - Page transitions between every page (Astro view transitions)
 - Smooth scrolling (Lenis)
-- Hero reveal, with the dandelion seeds blowing away as you scroll
+- Living hero: the artwork ripples under a finger or pointer, seeds drift and the lantern glows (`src/scripts/surface.js`)
+- Scrolling zooms through the hero artwork into the page
+- Featured creations sit on a 3D rail you drag, swipe or step through (`src/scripts/rail.js`)
 - Headings that rise into place, and a statement that fills in word by word
 - The four shop categories scroll sideways in a pinned section on desktop
 - Invitation-website phones fan out from a stack
@@ -44,3 +46,8 @@ in `public/assets/README.md`. A hero video can go in as `public/assets/brand/her
 
 In Vercel, create a new project from this repository. `vercel.json` sets everything else.
 The domain is added later, once the site is finished.
+
+## Design skills
+
+`.claude/skills/` holds two third-party skills (both MIT licensed) that guide design work in
+Claude Code sessions on this repository: `ui-ux-pro-max` and `design-motion-principles`.

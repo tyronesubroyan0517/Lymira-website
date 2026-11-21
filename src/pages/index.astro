@@ -2,14 +2,12 @@
 import Layout from '../layouts/Layout.astro'
 import Dandelion from '../components/Dandelion.astro'
 import Slot from '../components/Slot.astro'
-import ProductCard from '../components/ProductCard.astro'
 import { site, categories, products, reviews } from '../data/content.js'
-import { asset, video, wa } from '../lib/assets.js'
+import { asset, wa } from '../lib/assets.js'
 
 const heroImg = asset('brand/hero-banner')
-const heroVid = video('brand/hero-banner')
 const heroAlt = 'Lymira Creations logo artwork: a gold monogram L with a bluebird, dandelions, a lantern and a girl walking a garden path, with the words Made to Reconnect'
-const featuredOrder = ['bloom-where-you-are', 'santas-coming-to-town-website', 'hugos-kindness-bundle', 'silly-goose-baby-shower-invitation']
+const featuredOrder = ['halloween-party-invitation', 'poppy-and-the-garden-of-feelings', 'bloom-where-you-are', 'silly-goose-baby-shower-invitation', 'poppy-and-the-lonely-hedgehog', 'santas-coming-to-town-website', 'tailor-made-wedding-website', 'cherry-on-top-bachelorette', 'princess-unicorn-birthday-website']
 const featured = featuredOrder.map((s) => products.find((p) => p.slug === s))
 const showcase = products.filter((p) => p.showcase)
 const kickers = {
@@ -27,22 +25,6 @@ const ext = { target: '_blank', rel: 'noopener' }
 >
   <section class={`hero${heroImg ? ' has-art' : ''}`}>
     <div class="wrap hero-grid">
-      <div class="hero-frame">
-        {heroVid ? (
-          <video src={heroVid} poster={heroImg} autoplay muted loop playsinline aria-label={heroAlt}></video>
-        ) : heroImg ? (
-          <img src={heroImg} alt={heroAlt} fetchpriority="high" />
-        ) : (
-          <>
-            <div class="hero-wash"></div>
-            <div class="hero-placeholder">
-              <Dandelion class="hero-art" seeds={30} />
-              <p class="hero-wordmark" aria-hidden="true">Lymira Creations</p>
-            </div>
-            <p class="hero-note">Hero banner artwork to be placed</p>
-          </>
-        )}
-      </div>
       <div class="hero-copy">
         <h1 class="sr-only">Lymira Creations</h1>
         <p class="hero-tagline" data-split>Made to Reconnect</p>
@@ -51,7 +33,28 @@ const ext = { target: '_blank', rel: 'noopener' }
           <a class="btn" href="/shop" data-intro>Shop the Collection <span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
+      <div class="hero-stage">
+        <div class="hero-frame">
+          {heroImg ? (
+            <>
+              <img src={heroImg} alt={heroAlt} fetchpriority="high" />
+              <canvas class="hero-gl" aria-hidden="true"></canvas>
+              <canvas class="hero-seeds" aria-hidden="true"></canvas>
+            </>
+          ) : (
+            <>
+              <div class="hero-wash"></div>
+              <div class="hero-placeholder">
+                <Dandelion class="hero-art" seeds={30} />
+                <p class="hero-wordmark" aria-hidden="true">Lymira Creations</p>
+              </div>
+              <p class="hero-note">Hero banner artwork to be placed</p>
+            </>
+          )}
+        </div>
+      </div>
     </div>
+    <div class="hero-mist" aria-hidden="true"></div>
   </section>
 
   <section class="section band-paper">
@@ -85,13 +88,27 @@ const ext = { target: '_blank', rel: 'noopener' }
     <div class="worlds-progress" aria-hidden="true"><span></span></div>
   </section>
 
-  <section class="section band-sage">
-    <div class="wrap stack-lg">
-      <div class="section-head">
-        <h2 data-split>Featured creations</h2>
+  <section class="section band-sage rail-section">
+    <div class="wrap section-head">
+      <h2 data-split>Featured creations</h2>
+    </div>
+    <div class="rail" role="group" aria-roledescription="carousel" aria-label="Featured creations">
+      <div class="rail-stage">
+        {featured.map((p) => (
+          <a class="card rail-card" href={`/products/${p.slug}`} draggable="false">
+            <div class="card-media"><img src={asset(`products/${p.slug}`)} alt={p.alt} loading="lazy" decoding="async" draggable="false" /></div>
+            <div class="rail-caption">
+              <p class="card-meta">{p.type}</p>
+              <h3>{p.title}</h3>
+              <p class="price">{p.price}</p>
+            </div>
+          </a>
+        ))}
       </div>
-      <div class="masonry">
-        {featured.map((p) => <ProductCard p={p} natural />)}
+      <div class="rail-nav">
+        <button type="button" class="rail-btn" data-rail="-1" aria-label="Previous creation">←</button>
+        <a class="text-link" href="/shop">See every creation</a>
+        <button type="button" class="rail-btn" data-rail="1" aria-label="Next creation">→</button>
       </div>
     </div>
   </section>

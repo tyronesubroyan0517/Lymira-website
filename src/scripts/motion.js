@@ -4,6 +4,8 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
+import { createSurface } from './surface.js'
+import { createRail } from './rail.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -11,6 +13,7 @@ const reduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').match
 let lenis = null
 let ctx = null
 let mm = null
+let extras = []
 
 function startLenis() {
   if (lenis || reduce()) return
@@ -113,33 +116,49 @@ function reveals() {
   })
 }
 
-// ---------- Home: hero sequence and seeds blowing away ----------
+// ---------- Home: living hero, then a zoom through the artwork into the page ----------
 function hero() {
   const hero = document.querySelector('.hero')
   if (!hero) return
   const frame = hero.querySelector('.hero-frame')
+  const stage = hero.querySelector('.hero-stage')
+  const copy = hero.querySelector('.hero-copy')
+  const mist = hero.querySelector('.hero-mist')
   const words = hero.querySelectorAll('[data-split]')
-  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
-  tl.fromTo(frame, { clipPath: 'inset(12% 8% 12% 8% round 220px)', scale: 1.08 }, { clipPath: 'inset(0% 0% 0% 0% round 24px)', scale: 1, duration: 1.6, ease: 'expo.inOut' })
-  const art = frame.querySelector(':scope > img, :scope > video')
-  if (art) {
-    tl.fromTo(art, { scale: 1.25 }, { scale: 1.04, duration: 2.4, ease: 'expo.out' }, 0)
-  } else {
-    tl.from(hero.querySelectorAll('.hero-art .stem, .hero-art .leaf'), { opacity: 0, duration: 1 }, '-=0.6')
-      .from(hero.querySelectorAll('.hero-art .seed'), { scale: 0, transformOrigin: '100px 78px', opacity: 0, duration: 1.2, stagger: { each: 0.025, from: 'random' } }, '-=0.9')
-      .from(hero.querySelector('.hero-wordmark'), { yPercent: 40, opacity: 0, duration: 1.4 }, '-=1.1')
-  }
-  words.forEach((el) => tl.from(split(el), { yPercent: 110, duration: 1.2, stagger: 0.05 }, '-=1.1'))
-  tl.from(hero.querySelectorAll('.hero-copy [data-intro]'), { y: 24, opacity: 0, duration: 1, stagger: 0.1 }, '-=0.9')
 
-  // Scroll: the seeds lift off the dandelion and drift out of the frame.
-  const seeds = hero.querySelectorAll('.hero-art .seed')
-  const drift = gsap.timeline({ scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom 20%', scrub: 1 } })
-  seeds.forEach((s, i) => {
-    drift.to(s, { x: 120 + Math.random() * 260, y: -60 - Math.random() * 220, rotation: 40 + Math.random() * 140, opacity: 0, ease: 'power1.in', duration: 1 }, (i % 9) * 0.06)
+  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
+  tl.fromTo(frame, { clipPath: 'inset(12% 8% 12% 8% round 220px)' }, { clipPath: 'inset(0% 0% 0% 0% round 24px)', duration: 1.6, ease: 'expo.inOut' })
+  tl.fromTo(frame.querySelectorAll(':scope > img, :scope > canvas'), { scale: 1.25 }, { scale: 1, duration: 2.4 }, 0)
+  words.forEach((el) => tl.from(split(el), { yPercent: 110, duration: 1.2, stagger: 0.05 }, '-=1.9'))
+  tl.from(hero.querySelectorAll('.hero-copy [data-intro]'), { y: 24, opacity: 0, duration: 1, stagger: 0.1 }, '-=1.2')
+  if (!stage) return
+
+  const surface = createSurface(frame)
+  if (surface) extras.push(surface)
+  const zoom = { z: 1 }
+
+  // Scroll: the artwork grows to fill the screen while the view glides down the
+  // garden path, then dissolves into cream and the page continues.
+  const build = (trigger, pin, start, yShift) => {
+    const cover = () => Math.max(window.innerWidth / frame.offsetWidth, window.innerHeight / frame.offsetHeight) * 1.06
+    const xShift = () => { const r = stage.getBoundingClientRect(); return window.innerWidth / 2 - (r.left + r.width / 2) }
+    const scroll = gsap.timeline({
+      scrollTrigger: { trigger, pin, start, end: '+=120%', scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true, onToggle: (self) => stage.classList.toggle('is-flying', self.isActive) },
+    })
+    scroll
+      .to(copy, { opacity: 0, y: -40, duration: 0.3, ease: 'power1.in' }, 0)
+      .to(frame, { x: xShift, y: yShift, scale: cover, duration: 0.8, ease: 'power2.inOut' }, 0)
+      .to(zoom, { z: 2.6, duration: 1, ease: 'power1.in', onUpdate: () => surface?.setZoom(zoom.z) }, 0)
+      .to(mist, { opacity: 1, duration: 0.3, ease: 'none' }, 0.62)
+      .to(frame, { autoAlpha: 0, duration: 0.04 }, 0.94)
+      .to(mist, { opacity: 0, duration: 0.04 }, 0.96)
+  }
+  mm.add('(min-width: 960px)', () => {
+    build(hero, hero, 'top top', () => { const r = stage.getBoundingClientRect(), h = hero.getBoundingClientRect(); return window.innerHeight / 2 - (r.top - h.top + r.height / 2) })
   })
-  drift.to(frame, { yPercent: 8, scale: 0.97, ease: 'none', duration: 1.4 }, 0)
-  if (art) gsap.to(art, { yPercent: -6, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } })
+  mm.add('(max-width: 959px)', () => {
+    build(stage, stage, 'center center', 0)
+  })
 }
 
 // ---------- Home: statement that fills in word by word ----------
@@ -193,7 +212,7 @@ function phones() {
 // ---------- Cards follow the pointer slightly ----------
 function tilt() {
   if (!window.matchMedia('(hover: hover)').matches) return
-  document.querySelectorAll('.card .card-media, .show-card').forEach((el) => {
+  document.querySelectorAll('.card:not(.rail-card) .card-media, .show-card').forEach((el) => {
     const rx = gsap.quickTo(el, 'rotationX', { duration: 0.6, ease: 'power3' })
     const ry = gsap.quickTo(el, 'rotationY', { duration: 0.6, ease: 'power3' })
     el.addEventListener('pointermove', (e) => {
@@ -221,6 +240,7 @@ function init() {
     statement()
     worlds()
     phones()
+    document.querySelectorAll('.rail').forEach((el) => { const r = createRail(el); if (r) extras.push(r) })
     reveals()
     tilt()
   })
@@ -229,6 +249,8 @@ function init() {
 }
 
 function teardown() {
+  extras.forEach((e) => e.destroy())
+  extras = []
   ctx?.revert()
   mm?.revert()
   ScrollTrigger.getAll().forEach((t) => t.kill())
